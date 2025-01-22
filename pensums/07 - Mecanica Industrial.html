@@ -1,0 +1,1995 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../images/ico/7.ico">
+    <title>Pensum Ingeniería Mecánica Industrial</title>
+    <style>
+        :root {
+            --primary-color: #292929;
+            --accent-color: #7066e0;
+            --card-bg: #424242;
+            --text-color: #ffffff;
+            --success-color: #4CAF50;
+            --error-color: #C30003;
+            --locked-color: #808080;
+            --zero-color: #4a4a4a;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: var(--text-color);
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .menu-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s;
+            z-index: 1000;
+        }
+    
+        .menu-button:hover {
+            background-color: #5a52c4;
+        }
+        .stats {
+            display: flex;
+            gap: 20px;
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .semester-stats {
+            font-size: 0.9em;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .stat-label {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .semesters-wrapper {
+            display: grid;
+            grid-template-rows: auto auto;
+            gap: 20px;
+        }
+        .mandatory-indicator {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            width: 8px;
+            height: 8px;
+            background-color: black;
+            border-radius: 50%;
+        }
+        .row-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+        }
+
+        .semester-container {
+            background: var(--primary-color);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .course-card {
+            background-color: var(--card-bg);
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            position: relative;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .course-card.approved {
+            background-color: var(--success-color);
+        }
+
+        .course-card.locked {
+            background-color: var(--locked-color);
+            cursor: not-allowed;
+        }
+
+        .course-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+            padding-right: 45px;
+        }
+
+        .course-code {
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .prerequisites {
+            font-size: 0.8em;
+            margin-top: 5px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .semester-title {
+            color: var(--accent-color);
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .grade-input {
+            width: 50px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 2px 5px;
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+
+        .grade-input:disabled {
+            background: rgba(255, 255, 255, 0.1);
+            cursor: not-allowed;
+        }
+
+        .credits-display {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(0,0,0,0.2);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+        }
+
+        .course-requirements {
+            display: none;
+            margin-top: 10px;
+            font-size: 0.85em;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding-top: 10px;
+        }
+        
+        .course-requirements div {
+            margin: 3px 0;
+        }
+        
+        .course-card.expanded {
+            height: auto;
+            padding-bottom: 15px;
+        }
+        
+        .course-card.expanded .course-requirements {
+            display: block;
+        }
+        
+        .prereq-list, .postreq-list {
+            color: rgba(255,255,255,0.8);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+            vertical-align: middle;
+            margin-left: 10px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+            margin-left: auto;
+        }
+        
+        .auth-buttons .menu-button {
+            position: static;
+            margin: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--card-bg);
+            transition: .4s;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--accent-color);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .slider.round {
+            border-radius: 34px;
+        }
+        
+        .slider.round:before {
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="stats">
+            <div class="stat-item">
+                Promedio Global: <span id="gpa">0.00</span>
+            </div>
+            <div class="stat-item">
+                Total Créditos: <span id="credits">0</span>
+            </div>
+            <div class="stat-item">
+                Solo Obligatorios: 
+                <label class="switch">
+                    <input type="checkbox" id="mandatoryToggle">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            <div class="stat-item">
+                Créditos CLAR: 
+                <label class="switch">
+                    <input type="checkbox" id="creditosCLAR">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            Créditos Extra: 
+            <input type="number" id="extraCredits" min="0" max="999" value="0" style="
+                width: 60px;
+                background: rgba(255,255,255,0.1);
+                border: 1px solid rgba(255,255,255,0.2);
+                color: white;
+                padding: 2px 5px;
+                border-radius: 4px;
+            ">
+            <div class="auth-buttons">
+                <button class="menu-button" onclick="window.location.href='../index.html'">Menu</button>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>
+        function initializeGrid() {
+            const container = document.querySelector('.container');
+            const semestersWrapper = document.createElement('div');
+            semestersWrapper.className = 'semesters-wrapper';
+        
+            // Crear primera fila (semestres 1-5)
+            const row1 = document.createElement('div');
+            row1.className = 'row-container';
+            
+            // Crear segunda fila (semestres 6-10)
+            const row2 = document.createElement('div');
+            row2.className = 'row-container';
+            
+            // Crear los 10 semestres y distribuirlos en las dos filas
+            for (let i = 1; i <= 10; i++) {
+                const semesterContainer = document.createElement('div');
+                semesterContainer.className = 'semester-container';
+                
+                // Agregar título del semestre
+                const title = document.createElement('h2');
+                title.className = 'semester-title';
+                title.textContent = `Semestre ${i}`;
+                semesterContainer.appendChild(title);
+                
+                // Agregar estadísticas del semestre
+                const statsDiv = document.createElement('div');
+                statsDiv.className = 'semester-stats';
+                statsDiv.innerHTML = `
+                    <div>
+                        <span class="stat-label">Promedio: </span>
+                        <span class="semester-gpa">0.00</span>
+                    </div>
+                    <div>
+                        <span class="stat-label">Créditos: </span>
+                        <span class="semester-credits">0</span>
+                    </div>
+                `;
+                
+                semesterContainer.appendChild(statsDiv);
+                
+                // Distribuir en la fila correspondiente
+                if (i <= 5) {
+                    row1.appendChild(semesterContainer);
+                } else {
+                    row2.appendChild(semesterContainer);
+                }
+            }
+            
+            semestersWrapper.appendChild(row1);
+            semestersWrapper.appendChild(row2);
+            container.appendChild(semestersWrapper);
+        }        
+        // Agregar al final del archivo, justo antes de cerrar el body:        
+
+        function toggleCLARMode() {
+            const isCLARMode = document.getElementById('creditosCLAR').checked;
+            const currentStructure = isCLARMode ? clarCoursesStructure : CoursesStructure;
+            
+            // Clear existing semester containers while maintaining wrapper structure
+            document.querySelectorAll('.semester-container').forEach(container => {
+                const semesterTitle = container.querySelector('.semester-title').textContent;
+                const statsDiv = container.querySelector('.semester-stats');
+                container.innerHTML = '';
+                container.appendChild(createElementWithClass('h2', 'semester-title', semesterTitle));
+                
+                // Get semester number (1-10)
+                const semNumber = parseInt(semesterTitle.match(/\d+/)[0]);
+                const semKey = `semestre${semNumber}`;
+                
+                // Add courses for this semester
+                if (currentStructure[semKey]) {
+                    const courses = currentStructure[semKey].cursos;
+                    Object.entries(courses).forEach(([code, courseData]) => {
+                        const card = createCourseCard(code, courseData);
+                        container.appendChild(card);
+                    });
+                }
+                
+                // Re-add stats div
+                container.appendChild(statsDiv);
+            });
+        
+            updateStats();
+            checkPrerequisites();
+            localStorage.setItem('clarMode', isCLARMode);
+        }
+        
+        function createCourseCard(code, courseData) {
+            const card = document.createElement('div');
+            card.className = 'course-card';
+            card.setAttribute('data-code', code);
+            card.setAttribute('data-credits', courseData.creditos);
+            card.setAttribute('data-grade', '0');
+            
+            if (courseData.prerequisitos && courseData.prerequisitos.length > 0) {
+                card.setAttribute('data-prereq', courseData.prerequisitos.join(','));
+            }
+            
+            if (courseData.creditosRequeridos) {
+                card.setAttribute('data-required-credits', courseData.creditosRequeridos);
+            }
+        
+            if (courseData.obligatorio) {
+                const mandatoryIndicator = document.createElement('div');
+                mandatoryIndicator.className = 'mandatory-indicator';
+                card.appendChild(mandatoryIndicator);
+            }
+        
+            const credits = document.createElement('div');
+            credits.className = 'credits-display';
+            credits.textContent = `${courseData.creditos} cr.`;
+            card.appendChild(credits);
+        
+            const name = document.createElement('div');
+            name.className = 'course-name';
+            name.textContent = courseData.nombre;
+            card.appendChild(name);
+        
+            const codeDiv = document.createElement('div');
+            codeDiv.className = 'course-code';
+            codeDiv.textContent = code;
+            card.appendChild(codeDiv);
+        
+            const input = document.createElement('input');
+            input.type = 'number';
+            input.className = 'grade-input';
+            input.min = 0;
+            input.max = 100;
+            input.value = 0;
+            input.setAttribute('onchange', 'updateGrade(this)');
+            input.setAttribute('onclick', 'event.stopPropagation()');
+            card.appendChild(input);
+        
+            card.addEventListener('click', function(e) {
+                if (!e.target.classList.contains('grade-input')) {
+                    showCourseInfo(this, courseData);
+                }
+            });
+        
+            return card;
+        }
+        
+        function showCourseInfo(card, courseData) {
+            const existingInfo = card.querySelector('.course-requirements');
+            if (existingInfo) {
+                card.classList.remove('expanded');
+                existingInfo.remove();
+                return;
+            }
+        
+            const info = document.createElement('div');
+            info.className = 'course-requirements';
+            
+            let content = '';
+            
+            // Add prerequisites
+            if (courseData.prerequisitos && courseData.prerequisitos.length > 0) {
+                content += `<div>Pre-requisitos:</div>`;
+                const prereqDetails = courseData.prerequisitos.map(code => {
+                    const structure = document.getElementById('creditosCLAR').checked ? clarCoursesStructure : CoursesStructure;
+                    let courseName = 'Curso ' + code;
+                    for (const sem in structure) {
+                        if (structure[sem].cursos[code]) {
+                            courseName = structure[sem].cursos[code].nombre;
+                            break;
+                        }
+                    }
+                    return `${courseName} (${code})`;
+                });
+                content += `<div class="prereq-list">${prereqDetails.join('<br>')}</div>`;
+            }
+        
+            // Add postrequisites
+            if (courseData.postrequisitos && courseData.postrequisitos.length > 0) {
+                content += `<div style="margin-top: 8px">Post-requisitos:</div>`;
+                const postreqDetails = courseData.postrequisitos.map(code => {
+                    const structure = document.getElementById('creditosCLAR').checked ? clarCoursesStructure : CoursesStructure;
+                    let courseName = 'Curso ' + code;
+                    for (const sem in structure) {
+                        if (structure[sem].cursos[code]) {
+                            courseName = structure[sem].cursos[code].nombre;
+                            break;
+                        }
+                    }
+                    return `${courseName} (${code})`;
+                });
+                content += `<div class="postreq-list">${postreqDetails.join('<br>')}</div>`;
+            }
+        
+            // Add credits requirement if exists
+            if (courseData.creditosRequeridos) {
+                content += `<div style="margin-top: 8px">Créditos requeridos: ${courseData.creditosRequeridos}</div>`;
+            }
+        
+            if (!content) {
+                content = '<div>No tiene pre ni post requisitos</div>';
+            }
+        
+            info.innerHTML = content;
+            card.appendChild(info);
+            card.classList.add('expanded');
+        }
+        
+        function createElementWithClass(tag, className, text = '') {
+            const element = document.createElement(tag);
+            element.className = className;
+            if (text) element.textContent = text;
+            return element;
+        }
+        
+        const CoursesStructure = {
+            semestre1: {
+                cursos: {
+                    "0017": {
+                        nombre:"SOCIAL HUMANISTICA 1",
+                        creditos: 4,
+                        prerequisitos : [],
+                        postrequisitos: ["0019"],
+                        obligatorio: true
+                    },
+                    "0101": {
+                        nombre:"MATEMATICA BASICA 1",
+                        creditos: 7,
+                        prerequisitos : [],
+                        postrequisitos: ["0103","0147"],
+                        obligatorio: true
+                    },
+                    "0069": {
+                        nombre:"TECNICA COMPLEMENTARIA 1",
+                        creditos: 3,
+                        prerequisitos : [],
+                        postrequisitos: [],
+                        obligatorio: true
+                    },
+                    "0039": {
+                        nombre:"DEPORTES 1",
+                        creditos: 1,
+                        prerequisitos : [],
+                        postrequisitos: ["0040"],
+                        obligatorio: false
+                    },
+                    "0348": {
+                        nombre:"QUIMICA GENERAL 1",
+                        creditos: 3,
+                        prerequisitos : [],
+                        postrequisitos: ["0368"],
+                        obligatorio: true
+                    },
+                    "0006": {
+                        nombre:"IDIOMA TECNICO 1",
+                        creditos: 2,
+                        prerequisitos : [],
+                        postrequisitos: ["0008"],
+                        obligatorio: false
+                    }
+                },
+                obligatorios: ["0017","0101","0069","0348"]
+            },
+            semestre2: {
+                cursos: {
+                    "0019": {
+                        nombre:"SOCIAL HUMANISTICA 2",
+                        creditos: 4,
+                        prerequisitos : ["0017"],
+                        postrequisitos: ["0010","0018"],
+                        obligatorio: true
+                    },
+                    "0103": {
+                        nombre:"MATEMATICA BASICA 2",
+                        creditos: 7,
+                        prerequisitos : ["0101"],
+                        postrequisitos: ["0795","0960","0770","0107","0150","2025"],
+                        obligatorio: true
+                    },
+                    "0005": {
+                        nombre:"TECNICAS DE ESTUDIO E INVESTIGACION",
+                        creditos: 3,
+                        prerequisitos : [],
+                        postrequisitos: ["0732"],
+                        obligatorio: true
+                    },
+                    "0147": {
+                        nombre:"FISICA BASICA",
+                        creditos: 5,
+                        prerequisitos : ["0101"],
+                        postrequisitos: ["0150"],
+                        obligatorio: true
+                    },
+                    "0040": {
+                        nombre:"DEPORTES 2",
+                        creditos: 1,
+                        prerequisitos : ["0039"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0008": {
+                        nombre:"IDIOMA TECNICO 2",
+                        creditos: 2,
+                        prerequisitos : ["0006"],
+                        postrequisitos: ["0009"],
+                        obligatorio: false
+                    }
+                },
+                obligatorios: ["0019","0103","0005","0147"]
+            },
+            semestre3: {
+                cursos: {
+                    "0795": {
+                        nombre:"LOGICA DE SISTEMAS",
+                        creditos: 2,
+                        prerequisitos : ["0103"],
+                        postrequisitos: ["0796","0962","0771"],
+                        obligatorio: true,
+                        creditosRequeridos: "33"
+                    },
+                    "0960": {
+                        nombre:"MATEMATICA PARA COMPUTACION 1",
+                        creditos: 5,
+                        prerequisitos : ["0103"],
+                        postrequisitos: ["0796","0962","0771"],
+                        obligatorio: true,
+                        creditosRequeridos: "33"
+                    },
+                    "0770": {
+                        nombre:"INTROD A LA PROGRAMACION Y COMPUTACION 1",
+                        creditos: 4,
+                        prerequisitos : ["0103"],
+                        postrequisitos: ["0796","0962","0771","2025"],
+                        obligatorio: true,
+                        creditosRequeridos: "33"
+                    },
+                    "0107": {
+                        nombre:"MATEMATICA INTERMEDIA 1",
+                        creditos: 10,
+                        prerequisitos : ["0103"],
+                        postrequisitos: ["0732","0771","0112","0114","0152"],
+                        obligatorio: true
+                    },
+                    "0150": {
+                        nombre:"FISICA 1",
+                        creditos: 6,
+                        prerequisitos : ["0103","0147"],
+                        postrequisitos: ["0152"],
+                        obligatorio: true
+                    },
+                    "0009": {
+                        nombre:"IDIOMA TECNICO 3",
+                        creditos: 2,
+                        prerequisitos : ["0008"],
+                        postrequisitos: ["0011"],
+                        obligatorio: false
+                    }
+                },
+                obligatorios: ["0795","0960","0770","0107","0150"]
+            },
+            semestre4: {
+                cursos: {
+                    "0732": {
+                        nombre:"ESTADISTICA 1",
+                        creditos: 5,
+                        prerequisitos : ["0107","0005"],
+                        postrequisitos: ["0736","0368","0722","0601","0014","0734","0700"],
+                        obligatorio: true
+                    },
+                    "0796": {
+                        nombre:"LENGUAJES FORMALES Y DE PROGRAMACION",
+                        creditos: 3,
+                        prerequisitos : ["0770","0795","0960"],
+                        postrequisitos: ["0777","0772","0778","0773"],
+                        obligatorio: true
+                    },
+                    "0962": {
+                        nombre:"MATEMATICA PARA COMPUTACION 2",
+                        creditos: 5,
+                        prerequisitos : ["0960","0770","0795"],
+                        postrequisitos: ["0777","0964","0772"],
+                        obligatorio: true
+                    },
+                    "0771": {
+                        nombre:"INTROD A LA PROGRAMCION Y COMPUTACION 2",
+                        creditos: 5,
+                        prerequisitos : ["0107","0770","0795","0960"],
+                        postrequisitos: ["0777","0964","0772","0601"],
+                        obligatorio: true
+                    },
+                    "0010": {
+                        nombre:"LOGICA",
+                        creditos: 2,
+                        prerequisitos : ["0019"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0112": {
+                        nombre:"MATEMATICA INTERMEDIA 2",
+                        creditos: 5,
+                        prerequisitos : ["0107"],
+                        postrequisitos: ["0116","0118"],
+                        obligatorio: true
+                    },
+                    "0114": {
+                        nombre:"MATEMATICA INTERMEDIA 3",
+                        creditos: 5,
+                        prerequisitos : ["0107"],
+                        postrequisitos: ["0116","0118","0200"],
+                        obligatorio: true
+                    },
+                    "0152": {
+                        nombre:"FISICA 2",
+                        creditos: 6,
+                        prerequisitos : ["0107","0150"],
+                        postrequisitos: ["0964","0368","0200"],
+                        obligatorio: true
+                    },
+                    "0011": {
+                        nombre:"IDIOMA TECNICO 4",
+                        creditos: 2,
+                        prerequisitos : ["0009"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "2025": {
+                        nombre:"PRACTICAS INICIALES",
+                        creditos: 0,
+                        prerequisitos : ["0103","0770"],
+                        postrequisitos: ["2036"],
+                        obligatorio: true
+                    }
+                },
+                obligatorios: ["0722","0796","0962","0771","0112","0114","0152","2025"]
+            },
+            semestre5: {
+                cursos: {
+                    "0736": {
+                        nombre:"ANALISIS PROBABILISTICO",
+                        creditos: 4,
+                        prerequisitos : ["0732"],
+                        postrequisitos: ["0724"],
+                        obligatorio: true
+                    },
+                    "0777": {
+                        nombre:"ORGANIZACION DE LENGUAJES Y COMPILADORES 1",
+                        creditos: 4,
+                        prerequisitos : ["0771","0796","0962"],
+                        postrequisitos: ["0781","2036"],
+                        obligatorio: true
+                    },
+                    "0964": {
+                        nombre:"ORGANIZACION COMPUTACIONAL",
+                        creditos: 3,
+                        prerequisitos : ["0152","0771","0962"],
+                        postrequisitos: ["0778"],
+                        obligatorio: true
+                    },
+                    "0772": {
+                        nombre:"ESTRUCTURAS DE DATOS",
+                        creditos: 5,
+                        prerequisitos : ["0771","0796","0962"],
+                        postrequisitos: ["0722","0781","0773"],
+                        obligatorio: true
+                    },
+                    "0018": {
+                        nombre:"FILOSOFIA DE LA CIENCIA",
+                        creditos: 3,
+                        prerequisitos : ["0019"],
+                        postrequisitos: [],
+                        obligatorio: false,
+                        creditosRequeridos: "90"
+                    },
+                    "0116": {
+                        nombre:"MATEMATICA APLICADA 3",
+                        creditos: 5,
+                        prerequisitos : ["0112","0114"],
+                        postrequisitos: ["0722"],
+                        obligatorio: true
+                    },
+                    "0118": {
+                        nombre:"MATEMATICA APLICADA 1",
+                        creditos: 6,
+                        prerequisitos : ["0112","0114"],
+                        postrequisitos: ["0722","0122","0120"],
+                        obligatorio: true
+                    },
+                    "0368": {
+                        nombre:"PRINCIPIOS DE METROLOGIA",
+                        creditos: 3,
+                        prerequisitos : ["0732","0152","0348"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0650": {
+                        nombre:"CONTABILIDAD 1",
+                        creditos: 3,
+                        prerequisitos : [],
+                        postrequisitos: ["0652"],
+                        obligatorio: false,
+                        creditosRequeridos: "90"
+                    },
+                    "0028": {
+                        nombre:"ECOLOGIA",
+                        creditos: 3,
+                        prerequisitos : [],
+                        postrequisitos: ["0335"],
+                        obligatorio: false,
+                        creditosRequeridos: "90"
+                    }
+                },
+                obligatorios: ["0736","0777","0964","0772","0116","0118"]
+            },
+            semestre6: {
+                cursos: {
+                    "0722": {
+                        nombre:"TEORIA DE SISTEMAS 1",
+                        creditos: 5,
+                        prerequisitos : ["0732","0772","0116","0118"],
+                        postrequisitos: ["0724","0786"],
+                        obligatorio: true
+                    },
+                    "0601": {
+                        nombre:"INVESTIGACION DE OPERACIONES 1",
+                        creditos: 5,
+                        prerequisitos : ["0771","0732"],
+                        postrequisitos: ["0724","0603"],
+                        obligatorio: true
+                    },
+                    "0014": {
+                        nombre:"ECONOMIA",
+                        creditos: 4,
+                        prerequisitos : ["0732"],
+                        postrequisitos: [],
+                        obligatorio: true
+                    },
+                    "0781": {
+                        nombre:"ORGANIZACION DE LENGUAJES Y COMPILADORES 2",
+                        creditos: 5,
+                        prerequisitos : ["0777","0772"],
+                        postrequisitos: ["0281","0972"],
+                        obligatorio: true
+                    },
+                    "0778": {
+                        nombre:"ARQUITECTURA DE COMPUTADORES Y ENSAMBLADORES 1",
+                        creditos: 5,
+                        prerequisitos : ["0796","0964"],
+                        postrequisitos: ["0281","0779","0970","2036"],
+                        obligatorio: true
+                    },
+                    "0773": {
+                        nombre:"MANEJO E IMPLEMENTACION DE ARCHIVOS",
+                        creditos: 4,
+                        prerequisitos : ["0772","0796"],
+                        postrequisitos: ["0970","0774","2036"],
+                        obligatorio: true
+                    },
+                    "0122": {
+                        nombre:"MATEMATICA APLICADA 4",
+                        creditos: 4,
+                        prerequisitos : ["0118"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0120": {
+                        nombre:"MATEMATICA APLICADA 2",
+                        creditos: 6,
+                        prerequisitos : ["0118"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0200": {
+                        nombre:"INGENIERIA ELECTRICA 1",
+                        creditos: 5,
+                        prerequisitos : ["0114","0152"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0652": {
+                        nombre:"CONTABILIDAD 2",
+                        creditos: 3,
+                        prerequisitos : ["0650"],
+                        postrequisitos: ["0654"],
+                        obligatorio: false
+                    },
+                    "0335": {
+                        nombre:"GESTION DE DESASTRES",
+                        creditos: 3,
+                        prerequisitos : ["0028"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    }
+                },
+                obligatorios: ["0722","0601","0014","0781","0778","0773"]
+            },
+            semestre7: {
+                cursos: {
+                    "0724": {
+                        nombre:"TEORIA DE SISTEMAS 2",
+                        creditos: 5,
+                        prerequisitos : ["0722","0601","0736"],
+                        postrequisitos: ["0797","0729","0972"],
+                        obligatorio: true
+                    },
+                    "0603": {
+                        nombre:"INVESTIGACION DE OPERACIONES 2",
+                        creditos: 5,
+                        prerequisitos : ["0601"],
+                        postrequisitos: ["0729"],
+                        obligatorio: true
+                    },
+                    "0734": {
+                        nombre:"ESTADISTICA 2",
+                        creditos: 5,
+                        prerequisitos : ["0732"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0281": {
+                        nombre:"SISTEMAS OPERATIVOS 1",
+                        creditos: 5,
+                        prerequisitos : ["0781","0778"],
+                        postrequisitos: ["0285","0775"],
+                        obligatorio: true
+                    },
+                    "0779": {
+                        nombre:"ARQUITECTURA DE COMPUTADORES Y ENSAMBLADORES 2",
+                        creditos: 4,
+                        prerequisitos : ["0778"],
+                        postrequisitos: [],
+                        obligatorio: true
+                    },
+                    "0970": {
+                        nombre:"REDES DE COMPUTADORAS 1",
+                        creditos: 4,
+                        prerequisitos : ["0773","0778"],
+                        postrequisitos: ["0975"],
+                        obligatorio: true
+                    },
+                    "0774": {
+                        nombre:"SISTEMAS DE BASES DE DATOS 1",
+                        creditos: 5,
+                        prerequisitos : ["0773"],
+                        postrequisitos: ["0775","0283"],
+                        obligatorio: true
+                    },
+                    "0656": {
+                        nombre:"ADMINISTRACION DE EMPRESAS 1",
+                        creditos: 5,
+                        prerequisitos : [],
+                        postrequisitos: [],
+                        obligatorio: false,
+                        creditosRequeridos: "150"
+                    },
+                    "0654": {
+                        nombre:"CONTABILIDAD 3",
+                        creditos: 3,
+                        prerequisitos : ["0652"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "2036": {
+                        nombre:"PRACTICAS INTERMEDIAS",
+                        creditos: 0,
+                        prerequisitos : ["0778","0777","0773","2025"],
+                        postrequisitos: ["2009"],
+                        obligatorio: true
+                    }
+                },
+                obligatorios: ["0724","0603","0281","0779","0970","0774","2036"]
+            },
+            semestre8: {
+                cursos: {
+                    "0285": {
+                        nombre:"SISTEMAS OPERATIVOS 2",
+                        creditos: 4,
+                        prerequisitos : ["0281"],
+                        postrequisitos: [],
+                        obligatorio: true
+                    },
+                    "0975": {
+                        nombre:"REDES DE COMPUTADORAS 2",
+                        creditos: 4,
+                        prerequisitos : ["0970"],
+                        postrequisitos: ["0966","0974"],
+                        obligatorio: true
+                    },
+                    "0775": {
+                        nombre:"SISTEMAS DE BASES DE DATOS 2",
+                        creditos: 4,
+                        prerequisitos : ["0281","0774"],
+                        postrequisitos: ["0972","0738"],
+                        obligatorio: true
+                    },
+                    "0283": {
+                        nombre:"ANALISIS Y DISEÑO DE SISTEMAS 1",
+                        creditos: 5,
+                        prerequisitos : ["0774"],
+                        postrequisitos: ["0786","0785","0788"],
+                        obligatorio: true
+                    },
+                    "0797": {
+                        nombre:"SEMINARIO DE SISTEMAS 1",
+                        creditos: 3,
+                        prerequisitos : ["0724"],
+                        postrequisitos: ["0798"],
+                        obligatorio: true,
+                        creditosRequeridos: "170"
+                    },
+                    "0700": {
+                        nombre:"INGENIERIA ECONOMICA 1",
+                        creditos: 5,
+                        prerequisitos : ["0732"],
+                        postrequisitos: ["0702","0706"],
+                        obligatorio: false
+                    }
+                },
+                obligatorios: ["0285","0975","0775","0283","0797"]
+            },
+            semestre9: {
+                cursos: {
+                    "0729": {
+                        nombre:"MODELACION Y SIMULACION 1",
+                        creditos: 5,
+                        prerequisitos : ["0724","0603"],
+                        postrequisitos: ["0720"],
+                        obligatorio: true
+                    },
+                    "0786": {
+                        nombre:"SISTEMA ORGANIZACIONALES Y GERENCIALES 1",
+                        creditos: 4,
+                        prerequisitos : ["0283","0722"],
+                        postrequisitos: ["0787","0790"],
+                        obligatorio: true
+                    },
+                    "0972": {
+                        nombre:"INTELIGENCIA ARTIFICIAL 1",
+                        creditos: 4,
+                        prerequisitos : ["0781","0775","0724"],
+                        postrequisitos: ["0968"],
+                        obligatorio: true
+                    },
+                    "0966": {
+                        nombre:"SEGURIDAD Y AUDITORIAS DE REDES",
+                        creditos: 4,
+                        prerequisitos : ["0975"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0785": {
+                        nombre:"ANALISIS Y DISEÑO DE SISTEMAS 2",
+                        creditos: 5,
+                        prerequisitos : ["0283"],
+                        postrequisitos: ["0780","0789","0735"],
+                        obligatorio: true
+                    },
+                    "0788": {
+                        nombre:"SISTEMAS APLICADOS 1",
+                        creditos: 5,
+                        prerequisitos : ["0283"],
+                        postrequisitos: ["0789"],
+                        obligatorio: false
+                    },
+                    "0738": {
+                        nombre:"BASES DE DATOS AVANZADAS",
+                        creditos: 5,
+                        prerequisitos : ["0775"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0798": {
+                        nombre:"SEMINARIO DE SISTEMAS 2",
+                        creditos: 3,
+                        prerequisitos : ["0797"],
+                        postrequisitos: ["0799"],
+                        obligatorio: true,
+                        creditosRequeridos: "190"
+                    },
+                    "0288": {
+                        nombre:"INTROD AL ESTUDIO DE IMPACTO AMBIENTAL",
+                        creditos: 4,
+                        prerequisitos : [],
+                        postrequisitos: [],
+                        obligatorio: false,
+                        creditosRequeridos: "190"
+                    },
+                    "0702": {
+                        nombre:"INGENIERIA ECONOMICA 2",
+                        creditos: 4,
+                        prerequisitos : ["0700"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0001": {
+                        nombre:"ETICA PROFESIONAL 1",
+                        creditos: 4,
+                        prerequisitos : [],
+                        postrequisitos: [],
+                        obligatorio: false,
+                        creditosRequeridos: "200"
+                    },
+                    "2009": {
+                        nombre:"PRACTICA FINAL",
+                        creditos: 0,
+                        prerequisitos : ["2036"],
+                        postrequisitos: [],
+                        obligatorio: true,
+                        creditosRequeridos: "200"
+                    }
+                },
+                obligatorios: ["0729","0786","0972","0785","2009"]
+            },
+            semestre10: {
+                cursos: {
+                    "0787": {
+                        nombre:"SISTEMAS ORGANIZACIONALES Y GERENCIALES 2",
+                        creditos: 4,
+                        prerequisitos : ["0786"],
+                        postrequisitos: [],
+                        obligatorio: true
+                    },
+                    "0790": {
+                        nombre:"EMPRENDEDORES DE NEG. INFORMATICOS",
+                        creditos: 4,
+                        prerequisitos : ["0786"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0720": {
+                        nombre:"MODELACION Y SIMULACION 2",
+                        creditos: 5,
+                        prerequisitos : ["0729"],
+                        postrequisitos: [],
+                        obligatorio: true
+                    },
+                    "0968": {
+                        nombre:"INTELIGENCIA ARTIFICIAL 2",
+                        creditos: 4,
+                        prerequisitos : ["0972"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0974": {
+                        nombre:"REDES DE NUEVA GENERACION",
+                        creditos: 4,
+                        prerequisitos : ["0975"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0780": {
+                        nombre:"SOFTWARE AVANZADO",
+                        creditos: 6,
+                        prerequisitos : ["0785"],
+                        postrequisitos: [],
+                        obligatorio: true
+                    },
+                    "0789": {
+                        nombre:"SISTEMAS APLICADOS 2",
+                        creditos: 5,
+                        prerequisitos : ["0789","0788"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0735": {
+                        nombre:"AUDITORIA DE PROY. DE SOFTWARE",
+                        creditos: 5,
+                        prerequisitos : ["0785"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "7990": {
+                        nombre:"SEMINARIO DE INVESTIGACION DE EPS",
+                        creditos: 4,
+                        prerequisitos : [],
+                        postrequisitos: [],
+                        obligatorio: false,
+                        creditosRequeridos: "225"
+                    },
+                    "0710": {
+                        nombre:"PLANEAMIENTO",
+                        creditos: 6,
+                        prerequisitos : [],
+                        postrequisitos: [],
+                        obligatorio: false,
+                        creditosRequeridos: "190"
+                    },
+                    "0706": {
+                        nombre:"PREPARACION Y EVALUACION DE PROYECTOS 1",
+                        creditos: 4,
+                        prerequisitos : ["0700"],
+                        postrequisitos: [],
+                        obligatorio: false,
+                        creditosRequeridos: "190"
+                    },
+                    "0799": {
+                        nombre:"SEMINARIO DE INVESTIGACION",
+                        creditos: 3,
+                        prerequisitos : ["0798"],
+                        postrequisitos: [],
+                        obligatorio: true,
+                        creditosRequeridos: "220"
+                    }
+                },
+                obligatorios: ["0787","0720","0780","0799"]
+            }
+        };
+        const clarCoursesStructure = {
+            semestre1: {
+                cursos: {
+                    "0017": {
+                        nombre: "SOCIAL HUMANISTICA 1",
+                        creditos: 3,
+                        prerequisitos: [],
+                        postrequisitos: ["0019"],
+                        obligatorio: true
+                    },
+                    "0101": {
+                        nombre: "MATEMÁTICA BÁSICA 1",
+                        creditos: 9,
+                        prerequisitos: [],
+                        postrequisitos: ["0103","0960","0147"],
+                        obligatorio: true
+                    },
+                    "0005": {
+                        nombre: "TÉCNICAS DE ESTUDIO E INVESTIGACIÓN",
+                        creditos: 3,
+                        prerequisitos: [],
+                        postrequisitos: ["0732"],
+                        obligatorio: true
+                    },
+                    "0039": {
+                        nombre: "DEPORTES 1",
+                        creditos: 2,
+                        prerequisitos: [],
+                        postrequisitos: ["0040"],
+                        obligatorio: false
+                    },
+                    "0006": {
+                        nombre: "IDIOMA TECNICO 1",
+                        creditos: 3,
+                        prerequisitos: [],
+                        postrequisitos: ["0008"],
+                        obligatorio: false
+                    }
+                },
+                obligatorios: ["0017", "0101", "0005"]
+            },
+            semestre2: {
+                cursos: {
+                    "0019": {
+                        nombre: "SOCIAL HUMANISTICA 2",
+                        creditos: 3,
+                        prerequisitos: ["0017"],
+                        postrequisitos: ["0001","0010","0018"],
+                        obligatorio: true
+                    },
+                    "0103": {
+                        nombre: "MATEMATICA BASICA 2",
+                        creditos: 9,
+                        prerequisitos: ["0101"],
+                        postrequisitos: ["0795","0962","0770","0107","0150","02025"],
+                        obligatorio: true
+                    },
+                    "0960": {
+                        nombre: "MATEMATICA PARA COMPUTACION 1",
+                        creditos: 5,
+                        prerequisitos: ["0101"],
+                        postrequisitos: ["0795","0962","0770","0796","0771"],
+                        obligatorio: true
+                    },
+                    "0147": {
+                        nombre: "FISICA BASICA",
+                        creditos: 5,
+                        prerequisitos: ["0101"],
+                        postrequisitos: ["0795","0962","0770","0150"],
+                        obligatorio: true
+                    },
+                    "0040": {
+                        nombre: "DEPORTES 2",
+                        creditos: 2,
+                        prerequisitos: ["0039"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0008": {
+                        nombre: "IDIOMA TECNICO 2",
+                        creditos: 3,
+                        prerequisitos: ["0006"],
+                        postrequisitos: ["0009"],
+                        obligatorio: false
+                    }
+                },
+                obligatorios: ["0019", "0103", "0960", "0147"]
+            },
+            semestre3: {
+                cursos: {
+                    "0795": {
+                        nombre: "LOGICA DE SISTEMAS",
+                        creditos: 3,
+                        prerequisitos: ["0103","0147","0960"],
+                        postrequisitos: ["0796","0771"],
+                        obligatorio: true
+                    },
+                    "0962": {
+                        nombre: "MATEMATICA PARA COMPUTACION 2",
+                        creditos: 5,
+                        prerequisitos: ["0103","0147","0960"],
+                        postrequisitos: ["0777","0964","0772"],
+                        obligatorio: true
+                    },
+                    "0770": {
+                        nombre: " INTROD A LA PROGRAMACION Y COMPUTACION 1",
+                        creditos: 6,
+                        prerequisitos: ["0103","0147","0960"],
+                        postrequisitos: ["0796","0771","2025"],
+                        obligatorio: true
+                    },
+                    "0107": {
+                        nombre: "MATEMATICA INTERMEDIA 1",
+                        creditos: 9,
+                        prerequisitos: ["0103"],
+                        postrequisitos: ["0771","0112","0114","0152","0732"],
+                        obligatorio: true
+                    },
+                    "0150": {
+                        nombre: "FISICA 1",
+                        creditos: 5,
+                        prerequisitos: ["0103","0147"],
+                        postrequisitos: ["0152"],
+                        obligatorio: true
+                    },
+                    "0001": {
+                        nombre: "ETICA PROFESIONAL",
+                        creditos: 2,
+                        prerequisitos: ["0019"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0009": {
+                        nombre: "IDIOMA TECNICO 3",
+                        creditos: 3,
+                        prerequisitos: ["0008"],
+                        postrequisitos: ["0011"],
+                        obligatorio: false
+                    }
+                },
+                obligatorios: ["0795", "0962", "0770", "0107", "0150"]
+            },
+            semestre4: {
+                cursos: {
+                    "0796": {
+                        nombre: "LENGUAJES FORMALES Y DE PROGRAMACION",
+                        creditos: 4,
+                        prerequisitos: ["0770","0795","0960"],
+                        postrequisitos: ["0777","0772","0778","0773"],
+                        obligatorio: true
+                    },
+                    "0771": {
+                        nombre: "INTROD A LA PROGRAMACION Y COMPUTACION 2",
+                        creditos: 6,
+                        prerequisitos: ["0107","0770","0795","0960"],
+                        postrequisitos: ["0777","0964","0772","0601"],
+                        obligatorio: true
+                    },
+                    "0112": {
+                        nombre: "MATEMATICA INTERMEDIA 2",
+                        creditos: 6,
+                        prerequisitos: ["0107"],
+                        postrequisitos: ["0116","0118"],
+                        obligatorio: true
+                    },
+                    "0114": {
+                        nombre: "MATEMATICA INTERMEDIA 3",
+                        creditos: 6,
+                        prerequisitos: ["0107"],
+                        postrequisitos: ["0116","0118","0200"],
+                        obligatorio: true
+                    },
+                    "0152": {
+                        nombre: "FISICA 2",
+                        creditos: 6,
+                        prerequisitos: ["0107","0150"],
+                        postrequisitos: ["0964","0200"],
+                        obligatorio: true
+                    },
+                    "0010": {
+                        nombre: "LOGICA",
+                        creditos: 1,
+                        prerequisitos: ["0019"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0011": {
+                        nombre: "IDIOMA TECNICO 4",
+                        creditos: 3,
+                        prerequisitos: ["0009"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "2025": {
+                        nombre: "PRACTICAS INICIALES",
+                        creditos: 0,
+                        prerequisitos: ["0103","0770"],
+                        postrequisitos: ["2036"],
+                        obligatorio: true
+                    }
+                },
+                obligatorios: ["0796", "0771", "0112", "0114", "0152", "2025"]
+            },
+            semestre5: {
+                cursos: {
+                    "0732": {
+                        nombre: "ESTADISTICA 1",
+                        creditos: 5,
+                        prerequisitos: ["0107","0005"],
+                        postrequisitos: ["0722","0601","0014","0734","0700"],
+                        obligatorio: true
+                    },
+                    "0777": {
+                        nombre: "ORGANIZACION DE LENGUAJES Y COMPILADORES 1",
+                        creditos: 6,
+                        prerequisitos: ["0771","0796","0962"],
+                        postrequisitos: ["0781","2036"],
+                        obligatorio: true
+                    },
+                    "0964": {
+                        nombre: "ORGANIZACION COMPUTACIONAL",
+                        creditos: 4,
+                        prerequisitos: ["0152","0771","0962"],
+                        postrequisitos: ["0778"],
+                        obligatorio: true
+                    },
+                    "0772": {
+                        nombre: "ESTRUCTURA DE DATOS",
+                        creditos: 6,
+                        prerequisitos: ["0771","0796","0962"],
+                        postrequisitos: ["0722","0781","0773"],
+                        obligatorio: true
+                    },
+                    "0116": {
+                        nombre: "MATEMATICA APLICADA 3",
+                        creditos: 5,
+                        prerequisitos: ["0112","0114"],
+                        postrequisitos: ["0722"],
+                        obligatorio: true
+                    },
+                    "0118": {
+                        nombre: "MATEMATICA APLICADA 1",
+                        creditos: 5,
+                        prerequisitos: ["0112","0114"],
+                        postrequisitos: ["0122","0120"],
+                        obligatorio: true
+                    },
+                    "0018": {
+                        nombre: "FILOSOFIA DE LA CIENCIA",
+                        creditos: 1,
+                        prerequisitos: ["0019"],
+                        postrequisitos: [],
+                        obligatorio: true
+                    }
+                },
+                obligatorios: ["0732", "0777", "0964", "0772", "0116", "0118"]
+            },
+            semestre6: {
+                cursos: {
+                    "0722": {
+                        nombre: "TEORIA DE SISTEMAS 1",
+                        creditos: 4,
+                        prerequisitos: ["0732","0772","0116"],
+                        postrequisitos: ["0724","0786"],
+                        obligatorio: true
+                    },
+                    "0601": {
+                        nombre: "INVESTIGACION DE OPERACIONES 1",
+                        creditos: 6,
+                        prerequisitos: ["0771","0732"],
+                        postrequisitos: ["0724","0603"],
+                        obligatorio: true
+                    },
+                    "0014": {
+                        nombre: "ECONOMIA ",
+                        creditos: 3,
+                        prerequisitos: ["0732"],
+                        postrequisitos: [],
+                        obligatorio: true
+                    },
+                    "0781": {
+                        nombre: "ORGANIZACION DE LENGUAJES Y COMPILADORES 2",
+                        creditos: 6,
+                        prerequisitos: ["0772","0777"],
+                        postrequisitos: ["0281","0972"],
+                        obligatorio: true
+                    },
+                    "0778": {
+                        nombre: "ARQUITECTURA DE COMPUTADORES Y ENSAMBLADORES 1",
+                        creditos: 5,
+                        prerequisitos: ["0796","0964"],
+                        postrequisitos: ["0281","0779","0970","2036"],
+                        obligatorio: true
+                    },
+                    "0773": {
+                        nombre: "MANEJO E IMPLEMENTACION DE ARCHIVOS",
+                        creditos: 5,
+                        prerequisitos: ["0772","0796"],
+                        postrequisitos: ["0970","0774","2036"],
+                        obligatorio: true
+                    },
+                    "0122": {
+                        nombre: "MATEMATICA APLICADA 4",
+                        creditos: 5,
+                        prerequisitos: ["0118"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0120": {
+                        nombre: "MATEMATICA APLICADA 2",
+                        creditos: 5,
+                        prerequisitos: ["0118"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0200": {
+                        nombre: "INGENIERIA ELECTRICA 1",
+                        creditos: 6,
+                        prerequisitos: ["0114","0152"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    }
+                },
+                obligatorios: ["0722", "0601", "0014", "0781", "0778", "0773"]
+            },
+            semestre7: {
+                cursos: {
+                    "0724": {
+                        nombre: "TEORIA DE SISTEMAS 2",
+                        creditos: 4,
+                        prerequisitos: ["0601","0722"],
+                        postrequisitos: ["0797","0729","0972"],
+                        obligatorio: true
+                    },
+                    "0603": {
+                        nombre: "INVESTIGACION DE OPERACIONES 2",
+                        creditos: 6,
+                        prerequisitos: ["0601"],
+                        postrequisitos: ["0729"],
+                        obligatorio: true
+                    },
+                    "0734": {
+                        nombre: "ESTADISTICA 2",
+                        creditos: 5,
+                        prerequisitos: ["0732"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0281": {
+                        nombre: "SISTEMAS OPERATIVOS 1",
+                        creditos: 6,
+                        prerequisitos: ["0778","0781"],
+                        postrequisitos: ["0285","0775","0797"],
+                        obligatorio: true
+                    },
+                    "0779": {
+                        nombre: "ARQUITECTURA DE COMPUTADORES Y ENSAMBLADORES 2",
+                        creditos: 5,
+                        prerequisitos: ["0778"],
+                        postrequisitos: [],
+                        obligatorio: true
+                    },
+                    "0970": {
+                        nombre: "REDES DE COMPUTADOREAS 1",
+                        creditos: 5,
+                        prerequisitos: ["0773","0778"],
+                        postrequisitos: ["0975"],
+                        obligatorio: true
+                    },
+                    "0774": {
+                        nombre: "SISTEMAS DE BASES DE DATOS 1",
+                        creditos: 6,
+                        prerequisitos: ["0773"],
+                        postrequisitos: ["0775","0283","0797"],
+                        obligatorio: true
+                    },
+                    "2036": {
+                        nombre: "PRACTICAS INTERMEDIAS",
+                        creditos: 0,
+                        prerequisitos: ["0773","0777","0778","2025"],
+                        postrequisitos: ["2009"],
+                        obligatorio: true
+                    }
+                },
+                obligatorios: ["0724", "0603", "0281", "0779", "0970", "0774", "2036"]
+            },
+            semestre8: {
+                cursos: {
+                    "0285": {
+                        nombre: "SISTEMAS OPERATIVOS 2",
+                        creditos: 4,
+                        prerequisitos: ["0281"],
+                        postrequisitos: ["0798","2009"],
+                        obligatorio: true
+                    },
+                    "0975": {
+                        nombre: "REDES DE COMPUTADORAS 2",
+                        creditos: 6,
+                        prerequisitos: ["0970"],
+                        postrequisitos: ["0966","2009","0974"],
+                        obligatorio: true
+                    },
+                    "0775": {
+                        nombre: "SISTEMAS DE BASES DE DATOS 2",
+                        creditos: 7,
+                        prerequisitos: ["0281","0774"],
+                        postrequisitos: ["0972","0798","0776"],
+                        obligatorio: true
+                    },
+                    "0283": {
+                        nombre: "ANALISIS Y DISEÑO DE SISTEMAS 1",
+                        creditos: 6,
+                        prerequisitos: ["0774"],
+                        postrequisitos: ["0786","0785","0788","2009"],
+                        obligatorio: true
+                    },
+                    "0797": {
+                        nombre: "SEMINARIO DE SISTEMAS 1",
+                        creditos: 5,
+                        prerequisitos: ["0281","0724","0774"],
+                        postrequisitos: ["0798"],
+                        obligatorio: true
+                    },
+                    "0700": {
+                        nombre: "INGENIERIA ECONOMICA 1",
+                        creditos: 4,
+                        prerequisitos: ["0732"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    }
+                },
+                obligatorios: ["0285", "0975", "0775", "0283", "0797"]
+            },
+            semestre9: {
+                cursos: {
+                    "0729": {
+                        nombre: "MODELACION Y SIMULACION 1",
+                        creditos: 5,
+                        prerequisitos: ["0724","0603"],
+                        postrequisitos: ["0720"],
+                        obligatorio: true
+                    },
+                    "0786": {
+                        nombre: "SISTEMAS ORGANIZACIONALES Y GERENCIALES ",
+                        creditos: 5,
+                        prerequisitos: ["0283","0722"],
+                        postrequisitos: ["0787","0790"],
+                        obligatorio: true
+                    },
+                    "0972": {
+                        nombre: "INTELIGENCIA ARTIFICIAL 1",
+                        creditos: 7,
+                        prerequisitos: ["0781","0775","0724"],
+                        postrequisitos: ["0968"],
+                        obligatorio: true
+                    },
+                    "0966": {
+                        nombre: "SEGURIDAD Y AUDITORIA DE REDES",
+                        creditos: 3,
+                        prerequisitos: ["0975"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0785": {
+                        nombre: "ANALISIS Y DISEÑO DE SISTEMAS 2",
+                        creditos: 7,
+                        prerequisitos: ["0283"],
+                        postrequisitos: ["0780","0789","0735"],
+                        obligatorio: true
+                    },
+                    "0798": {
+                        nombre: "SEMINARIO DE SISTEMAS 2",
+                        creditos: 5,
+                        prerequisitos: ["0285","0775","0797"],
+                        postrequisitos: ["7999","0799"],
+                        obligatorio: true
+                    },
+                    "0788": {
+                        nombre: "SISTEMAS APLICADOS 1",
+                        creditos: 5,
+                        prerequisitos: ["0283"],
+                        postrequisitos: ["0789"],
+                        obligatorio: false
+                    },
+                    "0776": {
+                        nombre: "BASES DE DATOS AVANZADAS",
+                        creditos: 5,
+                        prerequisitos: ["0775"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "2009": {
+                        nombre: "PRACTICA FINAL",
+                        creditos: 0,
+                        prerequisitos: ["0283","0285","0975","2036"],
+                        postrequisitos: [],
+                        obligatorio: true
+                    }
+                },
+                obligatorios: ["0729", "0786", "0972", "0785", "0798", "2009"]
+            },
+            semestre10: {
+                cursos: {
+                    "0720": {
+                        nombre: "MODELACION Y SIMULACION 2",
+                        creditos: 6,
+                        prerequisitos: ["0729"],
+                        postrequisitos: [],
+                        obligatorio: true
+                    },
+                    "0787": {
+                        nombre: "SISTEMAS ORGANIZACIONALES Y GERENCIALES 2",
+                        creditos: 6,
+                        prerequisitos: ["0786"],
+                        postrequisitos: [],
+                        obligatorio: true
+                    },
+                    "0790": {
+                        nombre: "EMPRENDEDORES DE NEG. INFORMATICOS",
+                        creditos: 6,
+                        prerequisitos: ["0786"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0968": {
+                        nombre: "INTELIGENCIA ARTIFICIAL 2",
+                        creditos: 5,
+                        prerequisitos: ["0972"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0974": {
+                        nombre: "REDES DE NUEVA GENERACION",
+                        creditos: 3,
+                        prerequisitos: ["0975"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0780": {
+                        nombre: "SOFTWARE AVANZADO",
+                        creditos: 8,
+                        prerequisitos: ["0785"],
+                        postrequisitos: [],
+                        obligatorio: true
+                    },
+                    "0789": {
+                        nombre: "SISTEMAS APLICADOS 2",
+                        creditos: 5,
+                        prerequisitos: ["0785","0788"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0735": {
+                        nombre: "AUDITORIA DE PROY. DE SOFTWARE",
+                        creditos: 6,
+                        prerequisitos: ["0785"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "7999": {
+                        nombre: "SEMINARIO DE INVESTIGACION E.P.S SISTEMAS",
+                        creditos: 3,
+                        prerequisitos: ["0785","0786","0798"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0799": {
+                        nombre: "SEMINARIO DE INVESTIGACION",
+                        creditos: 3,
+                        prerequisitos: ["0785","0786","0798"],
+                        postrequisitos: [],
+                        obligatorio: true
+                    }
+                },
+                obligatorios: ["0720", "0787", "0780", "0799"]
+            }
+        };
+
+        function toggleCourseDisplay() {
+            const isCLARMode = document.getElementById('creditosCLAR').checked;
+            const showOnlyMandatory = document.getElementById('mandatoryToggle').checked;
+            const currentStructure = isCLARMode ? clarCoursesStructure : CoursesStructure;
+        
+            // Limpiar contenedores de semestre manteniendo estructura
+            document.querySelectorAll('.semester-container').forEach(container => {
+                const semesterTitle = container.querySelector('.semester-title').textContent;
+                const statsDiv = container.querySelector('.semester-stats');
+                container.innerHTML = '';
+                container.appendChild(createElementWithClass('h2', 'semester-title', semesterTitle));
+                
+                // Obtener número de semestre (1-10)
+                const semNumber = parseInt(semesterTitle.match(/\d+/)[0]);
+                const semKey = `semestre${semNumber}`;
+                
+                // Filtrar y agregar cursos para este semestre
+                if (currentStructure[semKey]) {
+                    const courses = currentStructure[semKey].cursos;
+                    Object.entries(courses).forEach(([code, courseData]) => {
+                        // Verificar si debemos mostrar el curso según el estado de los botones
+                        if (!showOnlyMandatory || courseData.obligatorio) {
+                            const card = createCourseCard(code, courseData);
+                            container.appendChild(card);
+                        }
+                    });
+                }
+                
+                // Re-agregar div de estadísticas
+                container.appendChild(statsDiv);
+            });
+        
+            updateStats();
+            checkPrerequisites();
+        }
+        
+        // Agregar event listeners para ambos toggles
+        document.getElementById('creditosCLAR').addEventListener('change', toggleCourseDisplay);
+        document.getElementById('mandatoryToggle').addEventListener('change', toggleCourseDisplay);
+        
+        // Modificar la inicialización para incluir el nuevo comportamiento
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeGrid();
+            const modoCLAR = localStorage.getItem('clarMode') === 'true';
+            document.getElementById('creditosCLAR').checked = modoCLAR;
+            toggleCourseDisplay(); // Reemplazar toggleCLARMode por toggleCourseDisplay
+        });
+
+        function updateStats() {
+            const isCLARMode = document.getElementById('creditosCLAR').checked;
+            const extraCredits = parseInt(document.getElementById('extraCredits').value) || 0;
+            const courseStructure = isCLARMode ? clarCoursesStructure : CoursesStructure;
+            
+            let totalCredits = extraCredits;
+            let totalGrade = 0;
+            let validGradeCount = 0;
+        
+            // Iterate through each semester
+            document.querySelectorAll('.semester-container').forEach(semesterContainer => {
+                let semesterCredits = 0;
+                let semesterGrade = 0;
+                let semesterValidGrades = 0;
+                
+                // Process each course in semester
+                semesterContainer.querySelectorAll('.course-card').forEach(card => {
+                    const grade = parseFloat(card.getAttribute('data-grade')) || 0;
+                    const credits = parseFloat(card.getAttribute('data-credits')) || 0;
+                    
+                    if (grade >= 61) {
+                        semesterCredits += credits;
+                        totalCredits += credits;
+                    }
+                    
+                    if (grade > 0) {
+                        semesterGrade += grade;
+                        totalGrade += grade;
+                        semesterValidGrades++;
+                        validGradeCount++;
+                    }
+                });
+        
+                // Update semester stats
+                const semesterStats = semesterContainer.querySelector('.semester-stats');
+                const avgGrade = semesterValidGrades > 0 ? (semesterGrade / semesterValidGrades).toFixed(2) : "0.00";
+                semesterStats.innerHTML = `
+                    <div><span class="stat-label">Promedio: </span><span class="semester-gpa">${avgGrade}</span></div>
+                    <div><span class="stat-label">Créditos: </span><span class="semester-credits">${semesterCredits}</span></div>
+                `;
+            });
+        
+            // Update global stats
+            const globalAvg = validGradeCount > 0 ? (totalGrade / validGradeCount).toFixed(2) : "0.00";
+            document.getElementById('gpa').textContent = globalAvg;
+            document.getElementById('credits').textContent = totalCredits;
+        }
+        document.getElementById('extraCredits').addEventListener('change', function() {
+            if (this.value < 0) this.value = 0;
+            if (this.value > 999) this.value = 999;
+            updateStats();
+        });
+        // Agregar al inicio del DOMContentLoaded
+        /*document.addEventListener('DOMContentLoaded', () => {
+            initializeGrid();
+            const modoCLAR = localStorage.getItem('clarMode') === 'true';
+            const savedExtraCredits = localStorage.getItem('extraCredits') || '0';
+            document.getElementById('creditosCLAR').checked = modoCLAR;
+            document.getElementById('extraCredits').value = savedExtraCredits;
+            toggleCourseDisplay();
+        });*/
+
+        // Agregar al event listener de extraCredits
+        document.getElementById('extraCredits').addEventListener('change', function() {
+            if (this.value < 0) this.value = 0;
+            if (this.value > 999) this.value = 999;
+            localStorage.setItem('extraCredits', this.value);
+            updateStats();
+        });
+        function checkPrerequisites() {
+            const isCLARMode = document.getElementById('creditosCLAR').checked;
+            const courseStructure = isCLARMode ? clarCoursesStructure : CoursesStructure;
+            
+            // Calculate total approved credits
+            let totalApprovedCredits = 0;
+            document.querySelectorAll('.course-card').forEach(card => {
+                const grade = parseFloat(card.getAttribute('data-grade')) || 0;
+                const credits = parseFloat(card.getAttribute('data-credits')) || 0;
+                if (grade >= 61) {
+                    totalApprovedCredits += credits;
+                }
+            });
+        
+            // Check each course's prerequisites
+            document.querySelectorAll('.course-card').forEach(card => {
+                const prerequisites = card.getAttribute('data-prereq')?.split(',') || [];
+                const requiredCredits = parseInt(card.getAttribute('data-required-credits')) || 0;
+                
+                let isUnlocked = true;
+        
+                // Case 1 & 3: Check prerequisites if they exist
+                if (prerequisites.length > 0) {
+                    isUnlocked = prerequisites.every(prereq => {
+                        const prereqCard = document.querySelector(`.course-card[data-code="${prereq}"]`);
+                        return prereqCard && parseFloat(prereqCard.getAttribute('data-grade')) >= 61;
+                    });
+                }
+        
+                // Case 2 & 3: Check required credits
+                if (requiredCredits > 0) {
+                    isUnlocked = isUnlocked && (totalApprovedCredits >= requiredCredits);
+                }
+        
+                // Case 4: No prerequisites and no required credits
+                // isUnlocked remains true if there are no requirements
+        
+                // Update card status
+                if (!isUnlocked) {
+                    card.classList.add('locked');
+                    const input = card.querySelector('.grade-input');
+                    if (input) {
+                        input.disabled = true;
+                        input.value = 0;
+                    }
+                } else {
+                    card.classList.remove('locked');
+                    const input = card.querySelector('.grade-input');
+                    if (input) {
+                        input.disabled = false;
+                    }
+                }
+            });
+        }
+        
+        function updateGrade(input) {
+            const card = input.closest('.course-card');
+            const grade = parseFloat(input.value) || 0;
+            
+            // Validate grade range
+            if (grade < 0 || grade > 100) {
+                alert('La nota debe estar entre 0 y 100');
+                input.value = 0;
+                return;
+            }
+        
+            card.setAttribute('data-grade', grade);
+            
+            if (grade >= 61) {
+                card.classList.add('approved');
+            } else {
+                card.classList.remove('approved');
+            }
+        
+            updateStats();
+            checkPrerequisites();
+        }                
+
+        
+        
+        // Add event listener for CLAR mode toggle
+        document.getElementById('creditosCLAR').addEventListener('change', toggleCLARMode);
+        
+        // Initialize on page load
+        // Inicializar el grid cuando carga la página
+        document.addEventListener('DOMContentLoaded', () => {
+            //initializeGrid();
+            // Cargar estado guardado del modo CLAR
+            const modoCLAR = localStorage.getItem('clarMode') === 'true';
+            document.getElementById('creditosCLAR').checked = modoCLAR;
+            toggleCLARMode(); // Esto poblará los cursos según el modo actual
+        });
+    </script>
+</body>
+</html>

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="images/2.ico">
-    <title>Pensum Ingeniería en Sistemas - FIUSAC</title>
+    <link rel="icon" type="image/x-icon" href="../images/ico/5.ico">
+    <title>Pensum Ingeniería Industrial</title>
     <style>
         :root {
             --primary-color: #292929;
@@ -24,13 +24,30 @@
             background-color: #1e1e1e;
             color: var(--text-color);
         }
-
+        
         .container {
             max-width: 1600px;
             margin: 0 auto;
             padding: 20px;
         }
-
+        .menu-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s;
+            z-index: 1000;
+        }
+    
+        .menu-button:hover {
+            background-color: #5a52c4;
+        }
         .stats {
             display: flex;
             gap: 20px;
@@ -195,6 +212,17 @@
             height: 0;
         }
         
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+            margin-left: auto;
+        }
+        
+        .auth-buttons .menu-button {
+            position: static;
+            margin: 0;
+        }
+        
         .slider {
             position: absolute;
             cursor: pointer;
@@ -266,6 +294,9 @@
                 padding: 2px 5px;
                 border-radius: 4px;
             ">
+            <div class="auth-buttons">
+                <button class="menu-button" onclick="window.location.href='../index.html'">Menu</button>
+            </div>
         </div>
         
     </div>
@@ -276,46 +307,53 @@
             const semestersWrapper = document.createElement('div');
             semestersWrapper.className = 'semesters-wrapper';
         
-            // Crear dos filas de 5 semestres cada una
-            for (let row = 0; row < 2; row++) {
-                const rowContainer = document.createElement('div');
-                rowContainer.className = 'row-container';
+            // Crear primera fila (semestres 1-5)
+            const row1 = document.createElement('div');
+            row1.className = 'row-container';
+            
+            // Crear segunda fila (semestres 6-10)
+            const row2 = document.createElement('div');
+            row2.className = 'row-container';
+            
+            // Crear los 10 semestres y distribuirlos en las dos filas
+            for (let i = 1; i <= 10; i++) {
+                const semesterContainer = document.createElement('div');
+                semesterContainer.className = 'semester-container';
                 
-                for (let i = 1; i <= 5; i++) {
-                    const semesterNum = row * 5 + i;
-                    const semesterContainer = document.createElement('div');
-                    semesterContainer.className = 'semester-container';
-                    
-                    // Agregar título del semestre
-                    const title = document.createElement('h2');
-                    title.className = 'semester-title';
-                    title.textContent = `Semestre ${semesterNum}`;
-                    semesterContainer.appendChild(title);
-                    
-                    // Agregar div de estadísticas
-                    const statsDiv = document.createElement('div');
-                    statsDiv.className = 'semester-stats';
-                    statsDiv.innerHTML = `
-                        <div>
-                            <span class="stat-label">Promedio: </span>
-                            <span class="semester-gpa">0.00</span>
-                        </div>
-                        <div>
-                            <span class="stat-label">Créditos: </span>
-                            <span class="semester-credits">0</span>
-                        </div>
-                    `;
-                    
-                    semesterContainer.appendChild(statsDiv);
-                    rowContainer.appendChild(semesterContainer);
+                // Agregar título del semestre
+                const title = document.createElement('h2');
+                title.className = 'semester-title';
+                title.textContent = `Semestre ${i}`;
+                semesterContainer.appendChild(title);
+                
+                // Agregar estadísticas del semestre
+                const statsDiv = document.createElement('div');
+                statsDiv.className = 'semester-stats';
+                statsDiv.innerHTML = `
+                    <div>
+                        <span class="stat-label">Promedio: </span>
+                        <span class="semester-gpa">0.00</span>
+                    </div>
+                    <div>
+                        <span class="stat-label">Créditos: </span>
+                        <span class="semester-credits">0</span>
+                    </div>
+                `;
+                
+                semesterContainer.appendChild(statsDiv);
+                
+                // Distribuir en la fila correspondiente
+                if (i <= 5) {
+                    row1.appendChild(semesterContainer);
+                } else {
+                    row2.appendChild(semesterContainer);
                 }
-                
-                semestersWrapper.appendChild(rowContainer);
             }
             
+            semestersWrapper.appendChild(row1);
+            semestersWrapper.appendChild(row2);
             container.appendChild(semestersWrapper);
-        }
-        
+        }        
         // Agregar al final del archivo, justo antes de cerrar el body:        
 
         function toggleCLARMode() {
@@ -1844,14 +1882,14 @@
             updateStats();
         });
         // Agregar al inicio del DOMContentLoaded
-        document.addEventListener('DOMContentLoaded', () => {
+        /*document.addEventListener('DOMContentLoaded', () => {
             initializeGrid();
             const modoCLAR = localStorage.getItem('clarMode') === 'true';
             const savedExtraCredits = localStorage.getItem('extraCredits') || '0';
             document.getElementById('creditosCLAR').checked = modoCLAR;
             document.getElementById('extraCredits').value = savedExtraCredits;
             toggleCourseDisplay();
-        });
+        });*/
 
         // Agregar al event listener de extraCredits
         document.getElementById('extraCredits').addEventListener('change', function() {
