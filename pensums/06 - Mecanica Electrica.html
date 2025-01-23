@@ -16,15 +16,13 @@
             --locked-color: #808080;
             --zero-color: #4a4a4a;
         }
-
         body {
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
             background-color: #1e1e1e;
             color: var(--text-color);
-        }
-        
+        }        
         .container {
             max-width: 1600px;
             margin: 0 auto;
@@ -43,8 +41,7 @@
             font-size: 1.1em;
             transition: background-color 0.3s;
             z-index: 1000;
-        }
-    
+        }    
         .menu-button:hover {
             background-color: #5a52c4;
         }
@@ -56,23 +53,19 @@
             border-radius: 8px;
             margin-bottom: 20px;
         }
-
         .stat-item {
             font-size: 1.2em;
             font-weight: bold;
         }
-
         .semester-stats {
             font-size: 0.9em;
             margin-top: 10px;
             padding-top: 10px;
             border-top: 1px solid rgba(255,255,255,0.1);
         }
-
         .stat-label {
             color: rgba(255,255,255,0.7);
         }
-
         .semesters-wrapper {
             display: grid;
             grid-template-rows: auto auto;
@@ -98,55 +91,48 @@
             padding: 15px;
             border-radius: 8px;
         }
-
         .course-card {
             background-color: var(--card-bg);
             padding: 15px;
             border-radius: 8px;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: transform 0.2s, background-color 0.3s;
             position: relative;
             margin-bottom: 10px;
-            transition: all 0.3s ease;
             overflow: hidden;
         }
-
         .course-card:hover {
             transform: translateY(-5px);
         }
-
         .course-card.approved {
             background-color: var(--success-color);
         }
-
         .course-card.locked {
             background-color: var(--locked-color);
             cursor: not-allowed;
         }
-
+        .course-card.failed {
+            background-color: var(--error-color);
+        }
         .course-name {
             font-weight: bold;
             margin-bottom: 5px;
             padding-right: 45px;
         }
-
         .course-code {
             font-size: 0.9em;
             color: rgba(255, 255, 255, 0.7);
         }
-
         .prerequisites {
             font-size: 0.8em;
             margin-top: 5px;
             color: rgba(255, 255, 255, 0.6);
         }
-
         .semester-title {
             color: var(--accent-color);
             margin-top: 0;
             margin-bottom: 15px;
         }
-
         .grade-input {
             width: 50px;
             background: rgba(255,255,255,0.1);
@@ -156,12 +142,10 @@
             border-radius: 4px;
             margin-top: 5px;
         }
-
         .grade-input:disabled {
             background: rgba(255, 255, 255, 0.1);
             cursor: not-allowed;
         }
-
         .credits-display {
             position: absolute;
             top: 5px;
@@ -171,7 +155,6 @@
             border-radius: 12px;
             font-size: 0.8em;
         }
-
         .course-requirements {
             display: none;
             margin-top: 10px;
@@ -179,24 +162,19 @@
             border-top: 1px solid rgba(255,255,255,0.2);
             padding-top: 10px;
         }
-        
         .course-requirements div {
             margin: 3px 0;
-        }
-        
+        }        
         .course-card.expanded {
             height: auto;
             padding-bottom: 15px;
-        }
-        
+        }        
         .course-card.expanded .course-requirements {
             display: block;
-        }
-        
+        }        
         .prereq-list, .postreq-list {
             color: rgba(255,255,255,0.8);
         }
-
         .switch {
             position: relative;
             display: inline-block;
@@ -204,25 +182,21 @@
             height: 34px;
             vertical-align: middle;
             margin-left: 10px;
-        }
-        
+        }        
         .switch input {
             opacity: 0;
             width: 0;
             height: 0;
-        }
-        
+        }        
         .auth-buttons {
             display: flex;
             gap: 10px;
             margin-left: auto;
-        }
-        
+        }        
         .auth-buttons .menu-button {
             position: static;
             margin: 0;
-        }
-        
+        }        
         .slider {
             position: absolute;
             cursor: pointer;
@@ -232,8 +206,7 @@
             bottom: 0;
             background-color: var(--card-bg);
             transition: .4s;
-        }
-        
+        }        
         .slider:before {
             position: absolute;
             content: "";
@@ -243,20 +216,16 @@
             bottom: 4px;
             background-color: white;
             transition: .4s;
-        }
-        
+        }        
         input:checked + .slider {
             background-color: var(--accent-color);
-        }
-        
+        }        
         input:checked + .slider:before {
             transform: translateX(26px);
-        }
-        
+        }        
         .slider.round {
             border-radius: 34px;
-        }
-        
+        }        
         .slider.round:before {
             border-radius: 50%;
         }
@@ -295,6 +264,8 @@
                 border-radius: 4px;
             ">
             <div class="auth-buttons">
+                <button class="menu-button" onclick="saveCourseData()">Guardar Cursos</button>
+                <button class="menu-button" onclick="loadCourseData()">Cargar Cursos</button>
                 <button class="menu-button" onclick="window.location.href='../index.html'">Menu</button>
             </div>
         </div>
@@ -1824,10 +1795,82 @@
         // Modificar la inicialización para incluir el nuevo comportamiento
         document.addEventListener('DOMContentLoaded', () => {
             initializeGrid();
-            const modoCLAR = localStorage.getItem('clarMode') === 'true';
-            document.getElementById('creditosCLAR').checked = modoCLAR;
-            toggleCourseDisplay(); // Reemplazar toggleCLARMode por toggleCourseDisplay
+            const savedData = localStorage.getItem('savedCourseData');
+            if (savedData) {
+                const courseData = JSON.parse(savedData);
+                document.getElementById('creditosCLAR').checked = courseData.clarMode;
+                document.getElementById('mandatoryToggle').checked = courseData.mandatoryMode;
+                document.getElementById('extraCredits').value = courseData.extraCredits || 0;
+            }
+            toggleCourseDisplay();
+            
+            // If there's saved data, ask user if they want to load it
+            if (savedData) {
+                if (confirm('¿Desea cargar los cursos guardados anteriormente?')) {
+                    loadCourseData();
+                }
+            }
         });
+
+
+        function saveCourseData() {
+            const courseData = {
+                courses: {},
+                extraCredits: document.getElementById('extraCredits').value,
+                clarMode: document.getElementById('creditosCLAR').checked,
+                mandatoryMode: document.getElementById('mandatoryToggle').checked
+            };
+        
+            // Get all course cards and their grades
+            document.querySelectorAll('.course-card').forEach(card => {
+                const courseCode = card.getAttribute('data-code');
+                const grade = card.getAttribute('data-grade');
+                if (grade && grade !== '0') {
+                    courseData.courses[courseCode] = grade;
+                }
+            });
+        
+            // Save to localStorage
+            localStorage.setItem('savedCourseData', JSON.stringify(courseData));
+            alert('Cursos guardados exitosamente');
+        }
+
+        function loadCourseData() {
+            const savedData = localStorage.getItem('savedCourseData');
+            if (!savedData) {
+                alert('No hay datos guardados');
+                return;
+            }
+        
+            const courseData = JSON.parse(savedData);
+        
+            // Restore settings
+            document.getElementById('extraCredits').value = courseData.extraCredits || 0;
+            document.getElementById('creditosCLAR').checked = courseData.clarMode;
+            document.getElementById('mandatoryToggle').checked = courseData.mandatoryMode;
+        
+            // First toggle display mode to ensure correct course structure
+            toggleCourseDisplay();
+        
+            // Then restore grades
+            Object.entries(courseData.courses).forEach(([code, grade]) => {
+                const card = document.querySelector(`.course-card[data-code="${code}"]`);
+                if (card) {
+                    const input = card.querySelector('.grade-input');
+                    if (input) {
+                        input.value = grade;
+                        input.dispatchEvent(new Event('change'));
+                    }
+                }
+            });
+        
+            // Update stats and prerequisites
+            updateStats();
+            checkPrerequisites();
+            
+            alert('Cursos cargados exitosamente');
+        }
+        
 
         function updateStats() {
             const isCLARMode = document.getElementById('creditosCLAR').checked;
@@ -1966,10 +2009,14 @@
         
             card.setAttribute('data-grade', grade);
             
-            if (grade >= 61) {
+            // Remove all grade-related classes first
+            card.classList.remove('approved', 'failed');
+            
+            // Apply appropriate class based on grade
+            if (grade > 0 && grade < 61) {
+                card.classList.add('failed');
+            } else if (grade >= 61 && grade <= 100) {
                 card.classList.add('approved');
-            } else {
-                card.classList.remove('approved');
             }
         
             updateStats();
