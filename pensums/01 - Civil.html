@@ -486,6 +486,13 @@
         const CoursesStructure = {
             semestre1: {
                 cursos: {
+                    "0005": {
+                        nombre:"TECNICAS DE ESTUDIO E INVESTIGACION",
+                        creditos: 3,
+                        prerequisitos : [],
+                        postrequisitos: ["0732"],
+                        obligatorio: true
+                    },
                     "0017": {
                         nombre:"SOCIAL HUMANISTICA 1",
                         creditos: 4,
@@ -497,39 +504,32 @@
                         nombre:"MATEMATICA BASICA 1",
                         creditos: 7,
                         prerequisitos : [],
-                        postrequisitos: ["0103","0147"],
-                        obligatorio: true
-                    },
-                    "0069": {
-                        nombre:"TECNICA COMPLEMENTARIA 1",
-                        creditos: 3,
-                        prerequisitos : [],
-                        postrequisitos: [],
+                        postrequisitos: ["0103","0147","0349"],
                         obligatorio: true
                     },
                     "0039": {
                         nombre:"DEPORTES 1",
                         creditos: 1,
                         prerequisitos : [],
-                        postrequisitos: ["0040"],
+                        postrequisitos: [],
                         obligatorio: false
                     },
                     "0348": {
                         nombre:"QUIMICA GENERAL 1",
                         creditos: 3,
                         prerequisitos : [],
-                        postrequisitos: ["0368"],
+                        postrequisitos: ["0349"],
                         obligatorio: true
                     },
-                    "0006": {
-                        nombre:"IDIOMA TECNICO 1",
-                        creditos: 2,
+                    "0069": {
+                        nombre:"TECNICA COMPLEMENTARIA 1",
+                        creditos: 3,
                         prerequisitos : [],
-                        postrequisitos: ["0008"],
-                        obligatorio: false
+                        postrequisitos: ["0074"],
+                        obligatorio: true
                     }
                 },
-                obligatorios: ["0017","0101","0069","0348"]
+                obligatorios: ["0005","0017","0101","0348","0069"]
             },
             semestre2: {
                 cursos: {
@@ -537,131 +537,100 @@
                         nombre:"SOCIAL HUMANISTICA 2",
                         creditos: 4,
                         prerequisitos : ["0017"],
-                        postrequisitos: ["0010","0018"],
+                        postrequisitos: ["0001","0662","0288"],
                         obligatorio: true
                     },
                     "0103": {
                         nombre:"MATEMATICA BASICA 2",
                         creditos: 7,
                         prerequisitos : ["0101"],
-                        postrequisitos: ["0795","0960","0770","0107","0150","2025"],
-                        obligatorio: true
-                    },
-                    "0005": {
-                        nombre:"TECNICAS DE ESTUDIO E INVESTIGACION",
-                        creditos: 3,
-                        prerequisitos : [],
-                        postrequisitos: ["0732"],
+                        postrequisitos: ["0107","0150","2025","0201"],
                         obligatorio: true
                     },
                     "0147": {
                         nombre:"FISICA BASICA",
                         creditos: 5,
                         prerequisitos : ["0101"],
-                        postrequisitos: ["0150"],
+                        postrequisitos: ["0030","0150","2025","0201"],
                         obligatorio: true
                     },
-                    "0040": {
-                        nombre:"DEPORTES 2",
-                        creditos: 1,
-                        prerequisitos : ["0039"],
-                        postrequisitos: [],
-                        obligatorio: false
+                    "0349": {
+                        nombre:"QUIMICA PARA INGENIERIA CIVIL",
+                        creditos: 4,
+                        prerequisitos : ["0101","0348"],
+                        postrequisitos: ["0028"],
+                        obligatorio: true
                     },
-                    "0008": {
-                        nombre:"IDIOMA TECNICO 2",
-                        creditos: 2,
-                        prerequisitos : ["0006"],
-                        postrequisitos: ["0009"],
-                        obligatorio: false
+                    "0074": {
+                        nombre:"DIBUJO CONSTRUCTIVO PARA INGENIERIA",
+                        creditos: 3,
+                        prerequisitos : ["0069"],
+                        postrequisitos: ["2025","0080","0201"],
+                        obligatorio: true
                     }
                 },
-                obligatorios: ["0019","0103","0005","0147"]
+                obligatorios: ["0019","0103","0147","0349","0074"]
             },
             semestre3: {
                 cursos: {
-                    "0795": {
-                        nombre:"LOGICA DE SISTEMAS",
-                        creditos: 2,
-                        prerequisitos : ["0103"],
-                        postrequisitos: ["0796","0962","0771"],
-                        obligatorio: true,
-                        creditosRequeridos: "33"
-                    },
-                    "0960": {
-                        nombre:"MATEMATICA PARA COMPUTACION 1",
-                        creditos: 5,
-                        prerequisitos : ["0103"],
-                        postrequisitos: ["0796","0962","0771"],
-                        obligatorio: true,
-                        creditosRequeridos: "33"
-                    },
-                    "0770": {
-                        nombre:"INTROD A LA PROGRAMACION Y COMPUTACION 1",
-                        creditos: 4,
-                        prerequisitos : ["0103"],
-                        postrequisitos: ["0796","0962","0771","2025"],
-                        obligatorio: true,
-                        creditosRequeridos: "33"
+                    "0030": {
+                        nombre:"GEOGRAFIA",
+                        creditos: 3,
+                        prerequisitos : ["0147"],
+                        postrequisitos: [],
+                        obligatorio: false
                     },
                     "0107": {
                         nombre:"MATEMATICA INTERMEDIA 1",
                         creditos: 10,
                         prerequisitos : ["0103"],
-                        postrequisitos: ["0732","0771","0112","0114","0152"],
+                        postrequisitos: ["0080","0152","0112","0114","0170","0732","0474"],
                         obligatorio: true
                     },
                     "0150": {
                         nombre:"FISICA 1",
                         creditos: 6,
                         prerequisitos : ["0103","0147"],
-                        postrequisitos: ["0152"],
+                        postrequisitos: ["0152","0170","0450","0474"],
                         obligatorio: true
                     },
-                    "0009": {
-                        nombre:"IDIOMA TECNICO 3",
-                        creditos: 2,
-                        prerequisitos : ["0008"],
-                        postrequisitos: ["0011"],
+                    "0028": {
+                        nombre:"ECOLOGIA",
+                        creditos: 3,
+                        prerequisitos : ["0349"],
+                        postrequisitos: ["0450","0662","0288"],
+                        obligatorio: true
+                    },
+                    "0001": {
+                        nombre:"ETICA PROFESIONAL",
+                        creditos: 4,
+                        prerequisitos : ["0019"],
+                        postrequisitos: [],
                         obligatorio: false
+                    },
+                    "2025": {
+                        nombre:"PRACTICAS INICIALES",
+                        creditos: 0,
+                        prerequisitos : ["0103","0047","0147"],
+                        postrequisitos: ["2036"],
+                        obligatorio: true
                     }
                 },
-                obligatorios: ["0795","0960","0770","0107","0150"]
+                obligatorios: ["0107","0150","0028","2025"]
             },
             semestre4: {
                 cursos: {
-                    "0732": {
-                        nombre:"ESTADISTICA 1",
-                        creditos: 5,
-                        prerequisitos : ["0107","0005"],
-                        postrequisitos: ["0736","0368","0722","0601","0014","0734","0700"],
+                    "0080": {
+                        nombre:"TOPOGRAFIA",
+                        creditos: 6,
+                        prerequisitos : ["0107","0074"],
+                        postrequisitos: ["0082"],
                         obligatorio: true
                     },
-                    "0796": {
-                        nombre:"LENGUAJES FORMALES Y DE PROGRAMACION",
-                        creditos: 3,
-                        prerequisitos : ["0770","0795","0960"],
-                        postrequisitos: ["0777","0772","0778","0773"],
-                        obligatorio: true
-                    },
-                    "0962": {
-                        nombre:"MATEMATICA PARA COMPUTACION 2",
-                        creditos: 5,
-                        prerequisitos : ["0960","0770","0795"],
-                        postrequisitos: ["0777","0964","0772"],
-                        obligatorio: true
-                    },
-                    "0771": {
-                        nombre:"INTROD A LA PROGRAMCION Y COMPUTACION 2",
-                        creditos: 5,
-                        prerequisitos : ["0107","0770","0795","0960"],
-                        postrequisitos: ["0777","0964","0772","0601"],
-                        obligatorio: true
-                    },
-                    "0010": {
-                        nombre:"LOGICA",
-                        creditos: 2,
-                        prerequisitos : ["0019"],
+                    "0152": {
+                        nombre:"FISICA 2",
+                        creditos: 6,
+                        prerequisitos : ["0107","0150"],
                         postrequisitos: [],
                         obligatorio: false
                     },
@@ -669,180 +638,205 @@
                         nombre:"MATEMATICA INTERMEDIA 2",
                         creditos: 5,
                         prerequisitos : ["0107"],
-                        postrequisitos: ["0116","0118"],
+                        postrequisitos: ["0250","0118"],
                         obligatorio: true
                     },
                     "0114": {
                         nombre:"MATEMATICA INTERMEDIA 3",
                         creditos: 5,
                         prerequisitos : ["0107"],
-                        postrequisitos: ["0116","0118","0200"],
+                        postrequisitos: ["0300","0118","0538"],
                         obligatorio: true
                     },
-                    "0152": {
-                        nombre:"FISICA 2",
-                        creditos: 6,
+                    "0170": {
+                        nombre:"MECANICA ANALITICA 1",
+                        creditos: 5,
                         prerequisitos : ["0107","0150"],
-                        postrequisitos: ["0964","0368","0200"],
+                        postrequisitos: ["0300","0250","0173"],
                         obligatorio: true
                     },
-                    "0011": {
-                        nombre:"IDIOMA TECNICO 4",
-                        creditos: 2,
-                        prerequisitos : ["0009"],
-                        postrequisitos: [],
+                    "0732": {
+                        nombre:"ESTADISTICA 1",
+                        creditos: 5,
+                        prerequisitos : ["0107","0005"],
+                        postrequisitos: ["0650","0022","0254"],
+                        obligatorio: true
+                    },
+                    "0450": {
+                        nombre:"GEOLOGIA",
+                        creditos: 3,
+                        prerequisitos : ["0028","0150"],
+                        postrequisitos: ["0453","0687","0538","0536","0478","0476","0458"],
+                        obligatorio: true
+                    },
+                    "0474": {
+                        nombre:"INTRODUCCION A LA INGENIERIA PETROLERA",
+                        creditos: 3,
+                        prerequisitos : ["0107","0150"],
+                        postrequisitos: ["0536"],
                         obligatorio: false
                     },
-                    "2025": {
-                        nombre:"PRACTICAS INICIALES",
-                        creditos: 0,
-                        prerequisitos : ["0103","0770"],
-                        postrequisitos: ["2036"],
-                        obligatorio: true
+                    "0662": {
+                        nombre:"LEGISLACION 1",
+                        creditos: 3,
+                        prerequisitos : ["0028","0019"],
+                        postrequisitos: ["0664"],
+                        obligatorio: false
                     }
                 },
-                obligatorios: ["0722","0796","0962","0771","0112","0114","0152","2025"]
+                obligatorios: ["0080","0112","0114","0170","0732","0450"]
             },
             semestre5: {
                 cursos: {
-                    "0736": {
-                        nombre:"ANALISIS PROBABILISTICO",
+                    "0082": {
+                        nombre:"TOPOGRAFIA 2",
+                        creditos: 6,
+                        prerequisitos : ["0080"],
+                        postrequisitos: ["0084","0550","0254"],
+                        obligatorio: true
+                    },
+                    "0300": {
+                        nombre:"RESISTENCIA DE MATERIALES 1",
                         creditos: 4,
-                        prerequisitos : ["0732"],
-                        postrequisitos: ["0724"],
+                        prerequisitos : ["0114","0170"],
+                        postrequisitos: ["0302","0455","0458","0307"],
                         obligatorio: true
                     },
-                    "0777": {
-                        nombre:"ORGANIZACION DE LENGUAJES Y COMPILADORES 1",
+                    "0453": {
+                        nombre:"MATERIALES DE CONSTRUCCION 1",
                         creditos: 4,
-                        prerequisitos : ["0771","0796","0962"],
-                        postrequisitos: ["0781","2036"],
+                        prerequisitos : ["0450"],
+                        postrequisitos: ["0455"],
                         obligatorio: true
                     },
-                    "0964": {
-                        nombre:"ORGANIZACION COMPUTACIONAL",
-                        creditos: 3,
-                        prerequisitos : ["0152","0771","0962"],
-                        postrequisitos: ["0778"],
-                        obligatorio: true
-                    },
-                    "0772": {
-                        nombre:"ESTRUCTURAS DE DATOS",
-                        creditos: 5,
-                        prerequisitos : ["0771","0796","0962"],
-                        postrequisitos: ["0722","0781","0773"],
-                        obligatorio: true
-                    },
-                    "0018": {
-                        nombre:"FILOSOFIA DE LA CIENCIA",
-                        creditos: 3,
-                        prerequisitos : ["0019"],
-                        postrequisitos: [],
-                        obligatorio: false,
-                        creditosRequeridos: "90"
-                    },
-                    "0116": {
-                        nombre:"MATEMATICA APLICADA 3",
-                        creditos: 5,
-                        prerequisitos : ["0112","0114"],
-                        postrequisitos: ["0722"],
+                    "0250": {
+                        nombre:"MECANICA DE FLUIDOS",
+                        creditos: 4,
+                        prerequisitos : ["0112","0170"],
+                        postrequisitos: ["0252"],
                         obligatorio: true
                     },
                     "0118": {
                         nombre:"MATEMATICA APLICADA 1",
                         creditos: 6,
                         prerequisitos : ["0112","0114"],
-                        postrequisitos: ["0722","0122","0120"],
+                        postrequisitos: ["0084","0700"],
                         obligatorio: true
                     },
-                    "0368": {
-                        nombre:"PRINCIPIOS DE METROLOGIA",
+                    "0687": {
+                        nombre:"GEOLOGIA ESTRUCTURAL",
                         creditos: 3,
-                        prerequisitos : ["0732","0152","0348"],
+                        prerequisitos : ["0450"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0538": {
+                        nombre:"GEOFISICA",
+                        creditos: 3,
+                        prerequisitos : ["0114","0450"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0536": {
+                        nombre:"PERFORACION DE POZOS 1",
+                        creditos: 3,
+                        prerequisitos : ["0450","0474"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0478": {
+                        nombre:"PETROLOGIA",
+                        creditos: 3,
+                        prerequisitos : ["0450"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0476": {
+                        nombre:"GEOLOGIA DEL PETROLEO",
+                        creditos: 3,
+                        prerequisitos : ["0450"],
                         postrequisitos: [],
                         obligatorio: false
                     },
                     "0650": {
                         nombre:"CONTABILIDAD 1",
                         creditos: 3,
-                        prerequisitos : [],
+                        prerequisitos : ["0732"],
                         postrequisitos: ["0652"],
-                        obligatorio: false,
-                        creditosRequeridos: "90"
+                        obligatorio: false
                     },
-                    "0028": {
-                        nombre:"ECOLOGIA",
+                    "0022": {
+                        nombre:"PSICOLOGIA INDUSTRIAL",
                         creditos: 3,
-                        prerequisitos : [],
-                        postrequisitos: ["0335"],
-                        obligatorio: false,
-                        creditosRequeridos: "90"
+                        prerequisitos : ["0732"],
+                        postrequisitos: ["658"],
+                        obligatorio: false
                     }
                 },
-                obligatorios: ["0736","0777","0964","0772","0116","0118"]
+                obligatorios: ["0082","0300","0453","0250","0118"]
             },
             semestre6: {
                 cursos: {
-                    "0722": {
-                        nombre:"TEORIA DE SISTEMAS 1",
-                        creditos: 5,
-                        prerequisitos : ["0732","0772","0116","0118"],
-                        postrequisitos: ["0724","0786"],
-                        obligatorio: true
-                    },
-                    "0601": {
-                        nombre:"INVESTIGACION DE OPERACIONES 1",
-                        creditos: 5,
-                        prerequisitos : ["0771","0732"],
-                        postrequisitos: ["0724","0603"],
-                        obligatorio: true
-                    },
-                    "0014": {
-                        nombre:"ECONOMIA",
+                    "0084": {
+                        nombre:"TOPOGRAFIA 3",
                         creditos: 4,
-                        prerequisitos : ["0732"],
-                        postrequisitos: [],
-                        obligatorio: true
-                    },
-                    "0781": {
-                        nombre:"ORGANIZACION DE LENGUAJES Y COMPILADORES 2",
-                        creditos: 5,
-                        prerequisitos : ["0777","0772"],
-                        postrequisitos: ["0281","0972"],
-                        obligatorio: true
-                    },
-                    "0778": {
-                        nombre:"ARQUITECTURA DE COMPUTADORES Y ENSAMBLADORES 1",
-                        creditos: 5,
-                        prerequisitos : ["0796","0964"],
-                        postrequisitos: ["0281","0779","0970","2036"],
-                        obligatorio: true
-                    },
-                    "0773": {
-                        nombre:"MANEJO E IMPLEMENTACION DE ARCHIVOS",
-                        creditos: 4,
-                        prerequisitos : ["0772","0796"],
-                        postrequisitos: ["0970","0774","2036"],
-                        obligatorio: true
-                    },
-                    "0122": {
-                        nombre:"MATEMATICA APLICADA 4",
-                        creditos: 4,
-                        prerequisitos : ["0118"],
+                        prerequisitos : ["0082","0118"],
                         postrequisitos: [],
                         obligatorio: false
                     },
-                    "0120": {
-                        nombre:"MATEMATICA APLICADA 2",
-                        creditos: 6,
-                        prerequisitos : ["0118"],
+                    "0302": {
+                        nombre:"RESISTENCIA DE MATERIALES 2",
+                        creditos: 4,
+                        prerequisitos : ["0300"],
+                        postrequisitos: ["0311","0314"],
+                        obligatorio: true
+                    },
+                    "0201": {
+                        nombre:"INSTALACIONES ELECTRICAS (CIVIL)",
+                        creditos: 3,
+                        prerequisitos : ["0103","0074","0147"],
                         postrequisitos: [],
+                        obligatorio: true
+                    },
+                    "0455": {
+                        nombre:"MATERIALES DE CONSTRUCCION 2",
+                        creditos: 5,
+                        prerequisitos : ["0300","0453"],
+                        postrequisitos: ["0314","2036","0460"],
+                        obligatorio: true
+                    },
+                    "0458": {
+                        nombre:"MECANICA DE SUELOS 1",
+                        creditos: 5,
+                        prerequisitos : ["0300","0450"],
+                        postrequisitos: ["0550","0460"],
+                        obligatorio: true
+                    },
+                    "0252": {
+                        nombre:"HIDRAULICA",
+                        creditos: 4,
+                        prerequisitos : ["0250"],
+                        postrequisitos: ["0254","0286","0258"],
+                        obligatorio: true
+                    },
+                    "0700": {
+                        nombre:"INGENIERIA ECONOMICA ",
+                        creditos: 3,
+                        prerequisitos : ["0118"],
+                        postrequisitos: ["0702","0288","0706"],
+                        obligatorio: true
+                    },
+                    "0658": {
+                        nombre:"ADMINISTRACION DE PERSONAL",
+                        creditos: 3,
+                        prerequisitos : ["0022"],
+                        postrequisitos: ["0656"],
                         obligatorio: false
                     },
-                    "0200": {
-                        nombre:"INGENIERIA ELECTRICA 1",
-                        creditos: 5,
-                        prerequisitos : ["0114","0152"],
+                    "0664": {
+                        nombre:"LEGISLACION 2",
+                        creditos: 3,
+                        prerequisitos : ["0662"],
                         postrequisitos: [],
                         obligatorio: false
                     },
@@ -850,330 +844,293 @@
                         nombre:"CONTABILIDAD 2",
                         creditos: 3,
                         prerequisitos : ["0650"],
-                        postrequisitos: ["0654"],
-                        obligatorio: false
-                    },
-                    "0335": {
-                        nombre:"GESTION DE DESASTRES",
-                        creditos: 3,
-                        prerequisitos : ["0028"],
                         postrequisitos: [],
                         obligatorio: false
                     }
                 },
-                obligatorios: ["0722","0601","0014","0781","0778","0773"]
+                obligatorios: ["0302","0201","0455","0458","0252","0700"]
             },
             semestre7: {
                 cursos: {
-                    "0724": {
-                        nombre:"TEORIA DE SISTEMAS 2",
+                    "0550": {
+                        nombre:"VIAS TERRESTRES 1",
                         creditos: 5,
-                        prerequisitos : ["0722","0601","0736"],
-                        postrequisitos: ["0797","0729","0972"],
+                        prerequisitos : ["0082","0458"],
+                        postrequisitos: ["0560","7980","0585"],
                         obligatorio: true
                     },
-                    "0603": {
-                        nombre:"INVESTIGACION DE OPERACIONES 2",
-                        creditos: 5,
-                        prerequisitos : ["0601"],
-                        postrequisitos: ["0729"],
+                    "0311": {
+                        nombre:"ANALISIS ESTRUCTURAL",
+                        creditos: 4,
+                        prerequisitos : ["0302"],
+                        postrequisitos: ["0318","0173","7980","0322"],
                         obligatorio: true
                     },
-                    "0734": {
-                        nombre:"ESTADISTICA 2",
+                    "0314": {
+                        nombre:"CONCRETO ARMADO 1",
+                        creditos: 4,
+                        prerequisitos : ["0302","0455"],
+                        postrequisitos: ["0560","0316","0318"],
+                        obligatorio: true
+                    },
+                    "0254": {
+                        nombre:"HIDROLOGIA",
                         creditos: 5,
-                        prerequisitos : ["0732"],
+                        prerequisitos : ["0732","0252","0082"],
+                        postrequisitos: ["0262","0288","0280","0282","7980"],
+                        obligatorio: true
+                    },
+                    "0286": {
+                        nombre:"HIDRAULICA DE CANALES",
+                        creditos: 4,
+                        prerequisitos : ["0252"],
+                        postrequisitos: ["0256"],
+                        obligatorio: true
+                    },
+                    "0258": {
+                        nombre:"MAQUINAS HIDRAULICAS",
+                        creditos: 4,
+                        prerequisitos : ["0252"],
                         postrequisitos: [],
                         obligatorio: false
                     },
-                    "0281": {
-                        nombre:"SISTEMAS OPERATIVOS 1",
-                        creditos: 5,
-                        prerequisitos : ["0781","0778"],
-                        postrequisitos: ["0285","0775"],
-                        obligatorio: true
-                    },
-                    "0779": {
-                        nombre:"ARQUITECTURA DE COMPUTADORES Y ENSAMBLADORES 2",
-                        creditos: 4,
-                        prerequisitos : ["0778"],
+                    "0702": {
+                        nombre:"INGENIERIA ECONOMICA 2",
+                        creditos: 3,
+                        prerequisitos : ["0700"],
                         postrequisitos: [],
-                        obligatorio: true
-                    },
-                    "0970": {
-                        nombre:"REDES DE COMPUTADORAS 1",
-                        creditos: 4,
-                        prerequisitos : ["0773","0778"],
-                        postrequisitos: ["0975"],
-                        obligatorio: true
-                    },
-                    "0774": {
-                        nombre:"SISTEMAS DE BASES DE DATOS 1",
-                        creditos: 5,
-                        prerequisitos : ["0773"],
-                        postrequisitos: ["0775","0283"],
-                        obligatorio: true
+                        obligatorio: false
                     },
                     "0656": {
                         nombre:"ADMINISTRACION DE EMPRESAS 1",
                         creditos: 5,
-                        prerequisitos : [],
-                        postrequisitos: [],
-                        obligatorio: false,
-                        creditosRequeridos: "150"
-                    },
-                    "0654": {
-                        nombre:"CONTABILIDAD 3",
-                        creditos: 3,
-                        prerequisitos : ["0652"],
+                        prerequisitos : ["0658"],
                         postrequisitos: [],
                         obligatorio: false
                     },
                     "2036": {
                         nombre:"PRACTICAS INTERMEDIAS",
                         creditos: 0,
-                        prerequisitos : ["0778","0777","0773","2025"],
-                        postrequisitos: ["2009"],
+                        prerequisitos : ["0455","2025"],
+                        postrequisitos: ["7980","2037"],
                         obligatorio: true
                     }
                 },
-                obligatorios: ["0724","0603","0281","0779","0970","0774","2036"]
+                obligatorios: ["0550","0311","0314","0254","0286","2036"]
             },
             semestre8: {
                 cursos: {
-                    "0285": {
-                        nombre:"SISTEMAS OPERATIVOS 2",
-                        creditos: 4,
-                        prerequisitos : ["0281"],
-                        postrequisitos: [],
-                        obligatorio: true
-                    },
-                    "0975": {
-                        nombre:"REDES DE COMPUTADORAS 2",
-                        creditos: 4,
-                        prerequisitos : ["0970"],
-                        postrequisitos: ["0966","0974"],
-                        obligatorio: true
-                    },
-                    "0775": {
-                        nombre:"SISTEMAS DE BASES DE DATOS 2",
-                        creditos: 4,
-                        prerequisitos : ["0281","0774"],
-                        postrequisitos: ["0972","0738"],
-                        obligatorio: true
-                    },
-                    "0283": {
-                        nombre:"ANALISIS Y DISEÑO DE SISTEMAS 1",
-                        creditos: 5,
-                        prerequisitos : ["0774"],
-                        postrequisitos: ["0786","0785","0788"],
-                        obligatorio: true
-                    },
-                    "0797": {
-                        nombre:"SEMINARIO DE SISTEMAS 1",
+                    "0560": {
+                        nombre:"VIAS TERRESTRES 2",
                         creditos: 3,
-                        prerequisitos : ["0724"],
-                        postrequisitos: ["0798"],
-                        obligatorio: true,
-                        creditosRequeridos: "170"
-                    },
-                    "0700": {
-                        nombre:"INGENIERIA ECONOMICA 1",
-                        creditos: 5,
-                        prerequisitos : ["0732"],
-                        postrequisitos: ["0702","0706"],
-                        obligatorio: false
-                    }
-                },
-                obligatorios: ["0285","0975","0775","0283","0797"]
-            },
-            semestre9: {
-                cursos: {
-                    "0729": {
-                        nombre:"MODELACION Y SIMULACION 1",
-                        creditos: 5,
-                        prerequisitos : ["0724","0603"],
-                        postrequisitos: ["0720"],
+                        prerequisitos : ["0550","0314"],
+                        postrequisitos: ["0460"],
                         obligatorio: true
                     },
-                    "0786": {
-                        nombre:"SISTEMA ORGANIZACIONALES Y GERENCIALES 1",
-                        creditos: 4,
-                        prerequisitos : ["0283","0722"],
-                        postrequisitos: ["0787","0790"],
-                        obligatorio: true
-                    },
-                    "0972": {
-                        nombre:"INTELIGENCIA ARTIFICIAL 1",
-                        creditos: 4,
-                        prerequisitos : ["0781","0775","0724"],
-                        postrequisitos: ["0968"],
-                        obligatorio: true
-                    },
-                    "0966": {
-                        nombre:"SEGURIDAD Y AUDITORIAS DE REDES",
-                        creditos: 4,
-                        prerequisitos : ["0975"],
-                        postrequisitos: [],
-                        obligatorio: false
-                    },
-                    "0785": {
-                        nombre:"ANALISIS Y DISEÑO DE SISTEMAS 2",
-                        creditos: 5,
-                        prerequisitos : ["0283"],
-                        postrequisitos: ["0780","0789","0735"],
-                        obligatorio: true
-                    },
-                    "0788": {
-                        nombre:"SISTEMAS APLICADOS 1",
-                        creditos: 5,
-                        prerequisitos : ["0283"],
-                        postrequisitos: ["0789"],
-                        obligatorio: false
-                    },
-                    "0738": {
-                        nombre:"BASES DE DATOS AVANZADAS",
-                        creditos: 5,
-                        prerequisitos : ["0775"],
-                        postrequisitos: [],
-                        obligatorio: false
-                    },
-                    "0798": {
-                        nombre:"SEMINARIO DE SISTEMAS 2",
+                    "0307": {
+                        nombre:"TIPOLOGIA ESTRUCTURAL",
                         creditos: 3,
-                        prerequisitos : ["0797"],
-                        postrequisitos: ["0799"],
-                        obligatorio: true,
-                        creditosRequeridos: "190"
+                        prerequisitos : ["0300"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0316": {
+                        nombre:"CONCRETO ARMADO 2",
+                        creditos: 4,
+                        prerequisitos : ["0314"],
+                        postrequisitos: ["0322"],
+                        obligatorio: true
+                    },
+                    "0318": {
+                        nombre:"GIMENTACIONES 1",
+                        creditos: 3,
+                        prerequisitos : ["0311","0314"],
+                        postrequisitos: ["0320","0256"],
+                        obligatorio: true
+                    },
+                    "0262": {
+                        nombre:"AGUAS SUBTERRANEAS",
+                        creditos: 3,
+                        prerequisitos : ["0254"],
+                        postrequisitos: [],
+                        obligatorio: true
                     },
                     "0288": {
                         nombre:"INTROD AL ESTUDIO DE IMPACTO AMBIENTAL",
-                        creditos: 4,
-                        prerequisitos : [],
-                        postrequisitos: [],
-                        obligatorio: false,
-                        creditosRequeridos: "190"
+                        creditos: 3,
+                        prerequisitos : ["0019","0700","0028","0254"],
+                        postrequisitos: ["0706","0335"],
+                        obligatorio: true
                     },
-                    "0702": {
-                        nombre:"INGENIERIA ECONOMICA 2",
-                        creditos: 4,
-                        prerequisitos : ["0700"],
+                    "0173": {
+                        nombre:"ANALISIS MECANICO",
+                        creditos: 6,
+                        prerequisitos : ["0170","0311"],
                         postrequisitos: [],
                         obligatorio: false
                     },
-                    "0001": {
-                        nombre:"ETICA PROFESIONAL 1",
+                    "0280": {
+                        nombre:"INGENIERIA SANITARIA 1",
                         creditos: 4,
-                        prerequisitos : [],
-                        postrequisitos: [],
-                        obligatorio: false,
-                        creditosRequeridos: "200"
+                        prerequisitos : ["0254"],
+                        postrequisitos: ["0284"],
+                        obligatorio: true
                     },
-                    "2009": {
-                        nombre:"PRACTICA FINAL",
-                        creditos: 0,
-                        prerequisitos : ["2036"],
+                    "0282": {
+                        nombre:"INGENIERIA SANITARIA 2",
+                        creditos: 4,
+                        prerequisitos : ["0254"],
+                        postrequisitos: ["0284"],
+                        obligatorio: true
+                    },
+                    "7980": {
+                        nombre:"INVESTIGACION 1",
+                        creditos: 3,
+                        prerequisitos : ["2036","0254","0311","0550"],
+                        postrequisitos: ["7990","7991"],
+                        obligatorio: true
+                    }
+                },
+                obligatorios: ["0560","0316","0318","0288","0280","0282","7980"]
+            },
+            semestre9: {
+                cursos: {
+                    "0460": {
+                        nombre:"PAVIMENTOS",
+                        creditos: 3,
+                        prerequisitos : ["0455","0458","0560"],
+                        postrequisitos: ["0666"],
+                        obligatorio: true
+                    },
+                    "0585": {
+                        nombre:"INGENIERIA DE TRANSITO Y TRANSPORTES",
+                        creditos: 3,
+                        prerequisitos : ["0550"],
                         postrequisitos: [],
-                        obligatorio: true,
-                        creditosRequeridos: "200"
+                        obligatorio: false
+                    },
+                    "0322": {
+                        nombre:"DISEÑO ESTRUCTURAL 1",
+                        creditos: 5,
+                        prerequisitos : ["0311","0316"],
+                        postrequisitos: ["0332","0324","0346","0666","2037"],
+                        obligatorio: true
+                    },
+                    "0320": {
+                        nombre:"GIMENTACIONES 2",
+                        creditos: 3,
+                        prerequisitos : ["0318"],
+                        postrequisitos: ["0332","0666","2037"],
+                        obligatorio: true
+                    },
+                    "0256": {
+                        nombre:"OBRAS HIDRÁULICAS",
+                        creditos: 3,
+                        prerequisitos : ["0286","0318"],
+                        postrequisitos: [],
+                        obligatorio: false
+                    },
+                    "0706": {
+                        nombre:"REPARACION Y EVALUACION DE PROYECTOS 1",
+                        creditos: 4,
+                        prerequisitos : ["0700","0288"],
+                        postrequisitos: ["0712","0710","0708"],
+                        obligatorio: true
+                    },
+                    "0284": {
+                        nombre:"SANEAMIENTO AMBIENTAL",
+                        creditos: 3,
+                        prerequisitos : ["0280","0282"],
+                        postrequisitos: ["7990","7991"],
+                        obligatorio: true
+                    },
+                    "0335": {
+                        nombre:"GESTION DE DESASTRES",
+                        creditos: 3,
+                        prerequisitos : ["0288"],
+                        postrequisitos: [],
+                        obligatorio: false
                     }
                 },
                 obligatorios: ["0729","0786","0972","0785","2009"]
             },
             semestre10: {
                 cursos: {
-                    "0787": {
-                        nombre:"SISTEMAS ORGANIZACIONALES Y GERENCIALES 2",
+                    "0332": {
+                        nombre:"PUENTES",
                         creditos: 4,
-                        prerequisitos : ["0786"],
+                        prerequisitos : ["0322","0320"],
                         postrequisitos: [],
                         obligatorio: true
                     },
-                    "0790": {
-                        nombre:"EMPRENDEDORES DE NEG. INFORMATICOS",
-                        creditos: 4,
-                        prerequisitos : ["0786"],
-                        postrequisitos: [],
-                        obligatorio: false
-                    },
-                    "0720": {
-                        nombre:"MODELACION Y SIMULACION 2",
+                    "0324": {
+                        nombre:"DISEÑO ESTRUCTURAL 2",
                         creditos: 5,
-                        prerequisitos : ["0729"],
+                        prerequisitos : ["0322"],
                         postrequisitos: [],
                         obligatorio: true
                     },
-                    "0968": {
-                        nombre:"INTELIGENCIA ARTIFICIAL 2",
-                        creditos: 4,
-                        prerequisitos : ["0972"],
-                        postrequisitos: [],
-                        obligatorio: false
-                    },
-                    "0974": {
-                        nombre:"REDES DE NUEVA GENERACION",
-                        creditos: 4,
-                        prerequisitos : ["0975"],
-                        postrequisitos: [],
-                        obligatorio: false
-                    },
-                    "0780": {
-                        nombre:"SOFTWARE AVANZADO",
-                        creditos: 6,
-                        prerequisitos : ["0785"],
+                    "0346": {
+                        nombre:"METODOS DE CONSTRUCCION Y SUPERVISION DE OBRAS",
+                        creditos: 3,
+                        prerequisitos : ["0322"],
                         postrequisitos: [],
                         obligatorio: true
                     },
-                    "0789": {
-                        nombre:"SISTEMAS APLICADOS 2",
-                        creditos: 5,
-                        prerequisitos : ["0789","0788"],
+                    "0712": {
+                        nombre:"URBANISMO",
+                        creditos: 3,
+                        prerequisitos : ["0706"],
                         postrequisitos: [],
                         obligatorio: false
                     },
-                    "0735": {
-                        nombre:"AUDITORIA DE PROY. DE SOFTWARE",
-                        creditos: 5,
-                        prerequisitos : ["0785"],
+                    "0710": {
+                        nombre:"PLANEAMIENTO",
+                        creditos: 3,
+                        prerequisitos : ["0706"],
+                        postrequisitos: [],
+                        obligatorio: true
+                    },
+                    "0666": {
+                        nombre:"COSTOS PRESUPUESTOS Y AVALUOS",
+                        creditos: 4,
+                        prerequisitos : ["0322","0320","0460"],
+                        postrequisitos: [],
+                        obligatorio: true
+                    },
+                    "0708": {
+                        nombre:"PREPARACION Y EVALUACION DE PROYECTOS 2",
+                        creditos: 4,
+                        prerequisitos : ["0706"],
                         postrequisitos: [],
                         obligatorio: false
+                    },
+                    "2037": {
+                        nombre:"PRACTICA FINAL",
+                        creditos: 0,
+                        prerequisitos : ["2036","0322","0320"],
+                        postrequisitos: [],
+                        obligatorio: true
                     },
                     "7990": {
                         nombre:"SEMINARIO DE INVESTIGACION DE EPS",
                         creditos: 4,
-                        prerequisitos : [],
+                        prerequisitos : ["7980","0284"],
                         postrequisitos: [],
-                        obligatorio: false,
-                        creditosRequeridos: "225"
+                        obligatorio: true
                     },
-                    "0710": {
-                        nombre:"PLANEAMIENTO",
-                        creditos: 6,
-                        prerequisitos : [],
-                        postrequisitos: [],
-                        obligatorio: false,
-                        creditosRequeridos: "190"
-                    },
-                    "0706": {
-                        nombre:"PREPARACION Y EVALUACION DE PROYECTOS 1",
-                        creditos: 4,
-                        prerequisitos : ["0700"],
-                        postrequisitos: [],
-                        obligatorio: false,
-                        creditosRequeridos: "190"
-                    },
-                    "0799": {
-                        nombre:"SEMINARIO DE INVESTIGACION",
+                    "7991": {
+                        nombre:"SEMINARIO DE INVESTIGACION CIVIL",
                         creditos: 3,
-                        prerequisitos : ["0798"],
+                        prerequisitos : ["7980","0284"],
                         postrequisitos: [],
-                        obligatorio: true,
-                        creditosRequeridos: "220"
+                        obligatorio: true
                     }
                 },
-                obligatorios: ["0787","0720","0780","0799"]
+                obligatorios: ["0332","0324","0346","0710","0666","2037","7990","7991"]
             }
         };
+
         const clarCoursesStructure = {
             semestre1: {
                 cursos: {
